@@ -1,6 +1,8 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import '../app_settings.dart';
+import '../l10n/app_strings.dart';
 import '../models/game_state.dart';
 import '../widgets/memory_card.dart';
 import '../services/storage_service.dart';
@@ -27,11 +29,13 @@ class GameScreen extends StatefulWidget {
 class _GameScreenState extends State<GameScreen> {
   GameState? _gameState;
   final StorageService _storageService = StorageService();
+  late int _activeGridSize;
   bool _gameOverHandled = false;
 
   @override
   void initState() {
     super.initState();
+    _activeGridSize = widget.gridSize;
     _loadGame();
   }
 
@@ -44,13 +48,18 @@ class _GameScreenState extends State<GameScreen> {
       isMultiplayer: widget.isMultiplayer,
       playerNames: widget.playerNames,
       theme: widget.theme,
-      gridSize: widget.gridSize,
+      gridSize: _activeGridSize,
       themeAssets: themeAssets,
     );
     gameState.addListener(_onGameStateChanged);
 
+    final previousGameState = _gameState;
+    previousGameState?.removeListener(_onGameStateChanged);
+    previousGameState?.dispose();
+
     setState(() {
       _gameState = gameState;
+      _gameOverHandled = false;
     });
   }
 
@@ -75,6 +84,7 @@ class _GameScreenState extends State<GameScreen> {
   Future<void> _handleGameOver() async {
     final gameState = _gameState;
     if (gameState == null) return;
+    final strings = AppStrings.of(context);
 
     if (widget.isMultiplayer) {
       final winner =
@@ -100,12 +110,14 @@ class _GameScreenState extends State<GameScreen> {
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: const Text('Game Over!',
-            style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
+        title: Text(strings.gameOver,
+            style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
         content: Text(
           widget.isMultiplayer
-              ? '🏆 Winner: ${gameState.players.reduce((a, b) => a.score > b.score ? a : b).name}'
-              : '⏱️ Completed in ${gameState.elapsedSeconds} seconds!',
+              ? strings.winner(gameState.players
+                  .reduce((a, b) => a.score > b.score ? a : b)
+                  .name)
+              : strings.completedIn(gameState.elapsedSeconds),
           style: const TextStyle(fontSize: 18),
         ),
         actions: [
@@ -114,10 +126,111 @@ class _GameScreenState extends State<GameScreen> {
               Navigator.of(context).pop();
               Navigator.of(context).pop();
             },
-            child: const Text('Main Menu', style: TextStyle(fontSize: 16)),
+            child: Text(strings.mainMenu, style: const TextStyle(fontSize: 16)),
           ),
         ],
       ),
+    );
+  }
+
+  Future<void> _showSettings() async {
+    final settings = AppSettingsScope.of(context);
+    var selectedLanguage = settings.language;
+    var selectedGridSize = _activeGridSize;
+
+    await showDialog<void>(
+      context: context,
+      builder: (dialogContext) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            final strings = AppStrings.of(context);
+
+            return AlertDialog(
+              title: Text(strings.gameSettings),
+              content: SizedBox(
+                width: 420,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(strings.languageLabel,
+                        style: const TextStyle(fontWeight: FontWeight.w900)),
+                    const SizedBox(height: 12),
+                    DropdownButtonFormField<AppLanguage>(
+                      initialValue: selectedLanguage,
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.language),
+                        labelText: strings.languageLabel,
+                      ),
+                      items: AppLanguage.values.map((language) {
+                        return DropdownMenuItem(
+                          value: language,
+                          child: Text(language.label),
+                        );
+                      }).toList(),
+                      onChanged: (language) {
+                        if (language == null) return;
+                        setDialogState(() {
+                          selectedLanguage = language;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 22),
+                    Text(strings.boardSize,
+                        style: const TextStyle(fontWeight: FontWeight.w900)),
+                    const SizedBox(height: 12),
+                    SegmentedButton<int>(
+                      segments: const [
+                        ButtonSegment(value: 4, label: Text('4x4')),
+                        ButtonSegment(value: 6, label: Text('6x6')),
+                        ButtonSegment(value: 8, label: Text('8x8')),
+                        ButtonSegment(value: 10, label: Text('10x10')),
+                        ButtonSegment(value: 12, label: Text('12x12')),
+                      ],
+                      selected: {selectedGridSize},
+                      onSelectionChanged: (newSelection) {
+                        setDialogState(() {
+                          selectedGridSize = newSelection.first;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      strings.restartApplies,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(dialogContext).pop(),
+                  child: Text(strings.cancel),
+                ),
+                FilledButton(
+                  onPressed: () async {
+                    await settings.setLanguage(selectedLanguage);
+
+                    final shouldRestart = selectedGridSize != _activeGridSize;
+                    if (shouldRestart) {
+                      _activeGridSize = selectedGridSize;
+                    }
+
+                    if (dialogContext.mounted) {
+                      Navigator.of(dialogContext).pop();
+                    }
+
+                    if (shouldRestart && mounted) {
+                      await _loadGame();
+                    }
+                  },
+                  child: Text(strings.apply),
+                ),
+              ],
+            );
+          },
+        );
+      },
     );
   }
 
@@ -130,12 +243,14 @@ class _GameScreenState extends State<GameScreen> {
   @override
   Widget build(BuildContext context) {
     final gameState = _gameState;
+    final strings = AppStrings.of(context);
 
     return Scaffold(
       backgroundColor: const Color(0xFFFFF7DA),
       appBar: AppBar(
-        title: Text(
-            widget.isMultiplayer ? 'Animal Match Party' : 'Animal Time Trial'),
+        title: Text(widget.isMultiplayer
+            ? strings.animalMatchParty
+            : strings.animalTimeTrial),
         actions: [
           if (!widget.isMultiplayer)
             Padding(
@@ -151,6 +266,12 @@ class _GameScreenState extends State<GameScreen> {
                 ),
               ),
             ),
+          IconButton(
+            tooltip: strings.gameSettings,
+            onPressed: _showSettings,
+            icon: const Icon(Icons.settings),
+          ),
+          const SizedBox(width: 8),
         ],
       ),
       body: gameState == null
@@ -183,7 +304,7 @@ class _GameScreenState extends State<GameScreen> {
             );
             final board = _FittedGameBoard(
               gameState: gameState,
-              gridSize: widget.gridSize,
+              gridSize: _activeGridSize,
             );
 
             if (useSideScoreboard) {
@@ -316,12 +437,13 @@ class _SinglePlayerScores extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final matchedCards = gameState.matchedPairPreviews;
+    final strings = AppStrings.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _ScoreHeader(
-          title: 'Matches',
+          title: strings.matches,
           score: '${gameState.matchedPairs}',
         ),
         const SizedBox(height: 12),

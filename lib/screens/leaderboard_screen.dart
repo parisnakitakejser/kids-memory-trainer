@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_strings.dart';
 import '../services/storage_service.dart';
 
 class LeaderboardScreen extends StatefulWidget {
@@ -45,8 +46,10 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
   }
 
   Widget _buildList(List<ScoreEntry> scores, bool isTimeBased) {
+    final strings = AppStrings.of(context);
+
     if (scores.isEmpty) {
-      return const Center(child: Text('No scores yet. Play a game!'));
+      return Center(child: Text(strings.noScoresYet));
     }
 
     return ListView.builder(
@@ -62,7 +65,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
           trailing: Text(
             isTimeBased
                 ? _formatTime(entry.timeInSeconds)
-                : '${entry.score} pts',
+                : strings.points(entry.score),
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
           ),
         );
@@ -72,14 +75,16 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Leaderboard'),
+        title: Text(strings.leaderboard),
         bottom: TabBar(
           controller: _tabController,
-          tabs: const [
-            Tab(text: 'Single Player (Fastest)'),
-            Tab(text: 'Multiplayer (Top Scores)'),
+          tabs: [
+            Tab(text: strings.singlePlayerFastest),
+            Tab(text: strings.multiplayerTopScores),
           ],
         ),
       ),

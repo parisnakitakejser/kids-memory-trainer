@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../app_settings.dart';
+import '../l10n/app_strings.dart';
 import '../models/game_state.dart';
 import 'game_screen.dart';
 import 'leaderboard_screen.dart';
@@ -20,12 +22,82 @@ class _MainMenuState extends State<MainMenu> {
 
   bool get _isMultiplayer => _selectedPlayerMode == PlayerMode.multi;
 
+  Future<void> _showSettings() async {
+    final settings = AppSettingsScope.of(context);
+    var selectedLanguage = settings.language;
+
+    await showDialog<void>(
+      context: context,
+      builder: (dialogContext) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            final dialogStrings = AppStrings.of(context);
+
+            return AlertDialog(
+              title: Text(dialogStrings.gameSettings),
+              content: SizedBox(
+                width: 360,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      dialogStrings.languageLabel,
+                      style: const TextStyle(fontWeight: FontWeight.w900),
+                    ),
+                    const SizedBox(height: 12),
+                    DropdownButtonFormField<AppLanguage>(
+                      initialValue: selectedLanguage,
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.language),
+                        labelText: dialogStrings.languageLabel,
+                      ),
+                      items: AppLanguage.values.map((language) {
+                        return DropdownMenuItem(
+                          value: language,
+                          child: Text(language.label),
+                        );
+                      }).toList(),
+                      onChanged: (language) {
+                        if (language == null) return;
+                        setDialogState(() {
+                          selectedLanguage = language;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(dialogContext).pop(),
+                  child: Text(dialogStrings.cancel),
+                ),
+                FilledButton(
+                  onPressed: () async {
+                    await settings.setLanguage(selectedLanguage);
+                    if (dialogContext.mounted) {
+                      Navigator.of(dialogContext).pop();
+                    }
+                  },
+                  child: Text(dialogStrings.apply),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
   void _startGame() {
+    final strings = AppStrings.of(context);
+
     if (_isMultiplayer &&
         (_player1Controller.text.trim().isEmpty ||
             _player2Controller.text.trim().isEmpty)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter names for both players.')),
+        SnackBar(content: Text(strings.enterNames)),
       );
       return;
     }
@@ -46,9 +118,11 @@ class _MainMenuState extends State<MainMenu> {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     final isWide = MediaQuery.sizeOf(context).width >= 900;
-    const heroPanel = _HeroPanel();
+    final heroPanel = _HeroPanel(strings: strings);
     final setupPanel = _SetupPanel(
+      strings: strings,
       selectedPlayerMode: _selectedPlayerMode,
       selectedGridSize: _selectedGridSize,
       isMultiplayer: _isMultiplayer,
@@ -65,6 +139,7 @@ class _MainMenuState extends State<MainMenu> {
         });
       },
       onStartGame: _startGame,
+      onSettings: _showSettings,
       onLeaderboard: () {
         Navigator.of(context).push(
           MaterialPageRoute(builder: (_) => const LeaderboardScreen()),
@@ -95,7 +170,7 @@ class _MainMenuState extends State<MainMenu> {
                   direction: isWide ? Axis.horizontal : Axis.vertical,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    if (isWide) const Expanded(flex: 5, child: heroPanel),
+                    if (isWide) Expanded(flex: 5, child: heroPanel),
                     if (!isWide) heroPanel,
                     SizedBox(width: isWide ? 28 : 0, height: isWide ? 0 : 24),
                     if (isWide) Expanded(flex: 4, child: setupPanel),
@@ -112,7 +187,9 @@ class _MainMenuState extends State<MainMenu> {
 }
 
 class _HeroPanel extends StatelessWidget {
-  const _HeroPanel();
+  final AppStrings strings;
+
+  const _HeroPanel({required this.strings});
 
   @override
   Widget build(BuildContext context) {
@@ -120,18 +197,20 @@ class _HeroPanel extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Wrap(
+        Wrap(
           spacing: 14,
           runSpacing: 14,
           children: [
-            _AnimalBadge(label: 'Panda', assetPath: 'assets/animals/1.png'),
-            _AnimalBadge(label: 'Tiger', assetPath: 'assets/animals/2.png'),
-            _AnimalBadge(label: 'Fox', assetPath: 'assets/animals/3.png'),
+            _AnimalBadge(
+                label: strings.panda, assetPath: 'assets/animals/1.png'),
+            _AnimalBadge(
+                label: strings.tiger, assetPath: 'assets/animals/2.png'),
+            _AnimalBadge(label: strings.fox, assetPath: 'assets/animals/3.png'),
           ],
         ),
         const SizedBox(height: 26),
         Text(
-          'Kids Memory Game',
+          strings.appTitle,
           style: Theme.of(context).textTheme.displayMedium?.copyWith(
                 color: const Color(0xFF22304A),
                 fontWeight: FontWeight.w900,
@@ -140,20 +219,20 @@ class _HeroPanel extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         Text(
-          'Find the animal pairs, collect matches, and race the timer.',
+          strings.menuSubtitle,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 color: const Color(0xFF31415F),
                 fontWeight: FontWeight.w700,
               ),
         ),
         const SizedBox(height: 26),
-        const Wrap(
+        Wrap(
           spacing: 10,
           runSpacing: 10,
           children: [
-            _FeaturePill(icon: Icons.pets, label: 'Animal cards'),
-            _FeaturePill(icon: Icons.emoji_events, label: 'Match scores'),
-            _FeaturePill(icon: Icons.timer, label: 'Time trial'),
+            _FeaturePill(icon: Icons.pets, label: strings.animalCards),
+            _FeaturePill(icon: Icons.emoji_events, label: strings.matchScores),
+            _FeaturePill(icon: Icons.timer, label: strings.timeTrial),
           ],
         ),
       ],
@@ -162,6 +241,7 @@ class _HeroPanel extends StatelessWidget {
 }
 
 class _SetupPanel extends StatelessWidget {
+  final AppStrings strings;
   final PlayerMode selectedPlayerMode;
   final int selectedGridSize;
   final bool isMultiplayer;
@@ -170,9 +250,11 @@ class _SetupPanel extends StatelessWidget {
   final ValueChanged<PlayerMode> onPlayerModeChanged;
   final ValueChanged<int> onGridSizeChanged;
   final VoidCallback onStartGame;
+  final VoidCallback onSettings;
   final VoidCallback onLeaderboard;
 
   const _SetupPanel({
+    required this.strings,
     required this.selectedPlayerMode,
     required this.selectedGridSize,
     required this.isMultiplayer,
@@ -181,6 +263,7 @@ class _SetupPanel extends StatelessWidget {
     required this.onPlayerModeChanged,
     required this.onGridSizeChanged,
     required this.onStartGame,
+    required this.onSettings,
     required this.onLeaderboard,
   });
 
@@ -204,22 +287,22 @@ class _SetupPanel extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const _SectionLabel(
-                icon: Icons.sports_esports, label: 'Player Mode'),
+            _SectionLabel(
+                icon: Icons.sports_esports, label: strings.playerMode),
             const SizedBox(height: 12),
             SizedBox(
               width: double.infinity,
               child: SegmentedButton<PlayerMode>(
-                segments: const [
+                segments: [
                   ButtonSegment(
                     value: PlayerMode.single,
-                    icon: Icon(Icons.person),
-                    label: Text('Single'),
+                    icon: const Icon(Icons.person),
+                    label: Text(strings.single),
                   ),
                   ButtonSegment(
                     value: PlayerMode.multi,
-                    icon: Icon(Icons.people),
-                    label: Text('Multi'),
+                    icon: const Icon(Icons.people),
+                    label: Text(strings.multi),
                   ),
                 ],
                 selected: {selectedPlayerMode},
@@ -229,11 +312,11 @@ class _SetupPanel extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
-            const _SectionLabel(icon: Icons.style, label: 'Card Mode'),
+            _SectionLabel(icon: Icons.style, label: strings.cardMode),
             const SizedBox(height: 12),
-            const _AnimalModeTile(),
+            _AnimalModeTile(label: strings.animals),
             const SizedBox(height: 24),
-            const _SectionLabel(icon: Icons.grid_view, label: 'Board Size'),
+            _SectionLabel(icon: Icons.grid_view, label: strings.boardSize),
             const SizedBox(height: 12),
             SizedBox(
               width: double.infinity,
@@ -253,21 +336,21 @@ class _SetupPanel extends StatelessWidget {
             ),
             if (isMultiplayer) ...[
               const SizedBox(height: 24),
-              const _SectionLabel(icon: Icons.face, label: 'Players'),
+              _SectionLabel(icon: Icons.face, label: strings.players),
               const SizedBox(height: 14),
               TextField(
                 controller: player1Controller,
-                decoration: const InputDecoration(
-                  labelText: 'Player 1 Name',
-                  prefixIcon: Icon(Icons.person),
+                decoration: InputDecoration(
+                  labelText: strings.player1Name,
+                  prefixIcon: const Icon(Icons.person),
                 ),
               ),
               const SizedBox(height: 12),
               TextField(
                 controller: player2Controller,
-                decoration: const InputDecoration(
-                  labelText: 'Player 2 Name',
-                  prefixIcon: Icon(Icons.person_outline),
+                decoration: InputDecoration(
+                  labelText: strings.player2Name,
+                  prefixIcon: const Icon(Icons.person_outline),
                 ),
               ),
             ],
@@ -279,17 +362,32 @@ class _SetupPanel extends StatelessWidget {
                 onPressed: onStartGame,
                 icon: Icon(isMultiplayer ? Icons.people : Icons.play_arrow),
                 label: Text(
-                  isMultiplayer ? 'Start Multiplayer' : 'Start Single Player',
+                  isMultiplayer
+                      ? strings.startMultiplayer
+                      : strings.startSinglePlayer,
                   style: const TextStyle(fontSize: 18),
                 ),
               ),
             ),
             const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: onSettings,
+                icon: const Icon(Icons.settings),
+                label: Text(
+                  strings.gameSettings,
+                  style: const TextStyle(fontWeight: FontWeight.w900),
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
             TextButton.icon(
               onPressed: onLeaderboard,
               icon: const Icon(Icons.leaderboard),
-              label: const Text('View Leaderboard',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+              label: Text(strings.viewLeaderboard,
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.w800)),
             ),
           ],
         ),
@@ -360,7 +458,9 @@ class _AnimalBadge extends StatelessWidget {
 }
 
 class _AnimalModeTile extends StatelessWidget {
-  const _AnimalModeTile();
+  final String label;
+
+  const _AnimalModeTile({required this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -370,23 +470,23 @@ class _AnimalModeTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(18),
         border: Border.all(color: const Color(0xFFFFD35B), width: 2),
       ),
-      child: const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         child: Row(
           children: [
-            Icon(Icons.pets, color: Color(0xFFFF7A59), size: 30),
-            SizedBox(width: 12),
+            const Icon(Icons.pets, color: Color(0xFFFF7A59), size: 30),
+            const SizedBox(width: 12),
             Expanded(
               child: Text(
-                'Animals',
-                style: TextStyle(
+                label,
+                style: const TextStyle(
                   color: Color(0xFF22304A),
                   fontSize: 18,
                   fontWeight: FontWeight.w900,
                 ),
               ),
             ),
-            Icon(Icons.check_circle, color: Color(0xFF24B47E)),
+            const Icon(Icons.check_circle, color: Color(0xFF24B47E)),
           ],
         ),
       ),
