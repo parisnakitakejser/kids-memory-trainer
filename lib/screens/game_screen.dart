@@ -7,6 +7,7 @@ import '../l10n/app_strings.dart';
 import '../models/game_state.dart';
 import '../services/sound_service.dart';
 import '../widgets/memory_card.dart';
+import '../widgets/app_footer.dart';
 import '../services/storage_service.dart';
 import '../services/theme_asset_service.dart';
 
@@ -311,6 +312,11 @@ class _GameScreenState extends State<GameScreen> {
           : Stack(
               children: [
                 _buildGameBody(context, gameState),
+                const Positioned(
+                  left: 16,
+                  bottom: 14,
+                  child: AppFooter(),
+                ),
                 if (gameState.matchPreviewCard != null)
                   MatchCelebrationOverlay(
                     card: gameState.matchPreviewCard!,

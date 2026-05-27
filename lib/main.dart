@@ -7,7 +7,12 @@ void main() {
 }
 
 class MemoryGameApp extends StatefulWidget {
-  const MemoryGameApp({super.key});
+  final bool enableUpdateCheck;
+
+  const MemoryGameApp({
+    super.key,
+    this.enableUpdateCheck = true,
+  });
 
   @override
   State<MemoryGameApp> createState() => _MemoryGameAppState();
@@ -93,7 +98,7 @@ class _MemoryGameAppState extends State<MemoryGameApp> {
             ),
           ),
         ),
-        home: const MainMenu(),
+        home: MainMenu(enableUpdateCheck: widget.enableUpdateCheck),
       ),
     );
   }

@@ -2,13 +2,20 @@ import 'package:flutter/material.dart';
 import '../app_settings.dart';
 import '../l10n/app_strings.dart';
 import '../models/game_state.dart';
+import '../services/update_service.dart';
+import '../widgets/app_footer.dart';
 import 'game_screen.dart';
 import 'leaderboard_screen.dart';
 
 enum PlayerMode { single, multi }
 
 class MainMenu extends StatefulWidget {
-  const MainMenu({super.key});
+  final bool enableUpdateCheck;
+
+  const MainMenu({
+    super.key,
+    this.enableUpdateCheck = true,
+  });
 
   @override
   State<MainMenu> createState() => _MainMenuState();
@@ -17,10 +24,108 @@ class MainMenu extends StatefulWidget {
 class _MainMenuState extends State<MainMenu> {
   final TextEditingController _player1Controller = TextEditingController();
   final TextEditingController _player2Controller = TextEditingController();
+  final UpdateService _updateService = UpdateService();
   PlayerMode _selectedPlayerMode = PlayerMode.single;
   int _selectedGridSize = 6;
+  bool _checkedForUpdate = false;
 
   bool get _isMultiplayer => _selectedPlayerMode == PlayerMode.multi;
+
+  @override
+  void initState() {
+    super.initState();
+    if (!widget.enableUpdateCheck) return;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkForUpdateOnStartup();
+    });
+  }
+
+  Future<void> _checkForUpdateOnStartup() async {
+    if (_checkedForUpdate || !mounted) return;
+    _checkedForUpdate = true;
+
+    final update = await _updateService.checkForUpdate();
+    if (!mounted || update == null) return;
+
+    await _showUpdateDialog(update);
+  }
+
+  Future<void> _showUpdateDialog(UpdateInfo update) async {
+    final strings = AppStrings.of(context);
+
+    await showDialog<void>(
+      context: context,
+      builder: (dialogContext) {
+        var isDownloading = false;
+
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            final dialogStrings = AppStrings.of(context);
+
+            return AlertDialog(
+              title: Text(dialogStrings.updateAvailable),
+              content: Text(dialogStrings.updateAvailableBody(update.version)),
+              actions: [
+                TextButton(
+                  onPressed: isDownloading
+                      ? null
+                      : () => Navigator.of(dialogContext).pop(),
+                  child: Text(dialogStrings.later),
+                ),
+                FilledButton.icon(
+                  onPressed: isDownloading
+                      ? null
+                      : () async {
+                          setDialogState(() {
+                            isDownloading = true;
+                          });
+
+                          final messenger = ScaffoldMessenger.of(context);
+                          messenger.showSnackBar(
+                            SnackBar(content: Text(strings.downloadingUpdate)),
+                          );
+
+                          try {
+                            final file =
+                                await _updateService.downloadUpdate(update);
+                            await _updateService.openInstaller(file);
+
+                            if (dialogContext.mounted) {
+                              Navigator.of(dialogContext).pop();
+                            }
+
+                            if (mounted) {
+                              messenger.showSnackBar(
+                                SnackBar(content: Text(strings.updateOpened)),
+                              );
+                            }
+                          } catch (_) {
+                            if (mounted) {
+                              messenger.showSnackBar(
+                                SnackBar(content: Text(strings.updateFailed)),
+                              );
+                            }
+                            setDialogState(() {
+                              isDownloading = false;
+                            });
+                          }
+                        },
+                  icon: isDownloading
+                      ? const SizedBox.square(
+                          dimension: 18,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : const Icon(Icons.download_rounded),
+                  label: Text(dialogStrings.downloadAndInstall),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
 
   Future<void> _showSettings() async {
     final settings = AppSettingsScope.of(context);
@@ -148,39 +253,51 @@ class _MainMenuState extends State<MainMenu> {
     );
 
     return Scaffold(
-      body: DecoratedBox(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFFFFF1A8),
-              Color(0xFFA7E8FF),
-              Color(0xFFFFC4D6),
-            ],
-          ),
-        ),
-        child: SafeArea(
-          child: Center(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(28),
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 1040),
-                child: Flex(
-                  direction: isWide ? Axis.horizontal : Axis.vertical,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    if (isWide) Expanded(flex: 5, child: heroPanel),
-                    if (!isWide) heroPanel,
-                    SizedBox(width: isWide ? 28 : 0, height: isWide ? 0 : 24),
-                    if (isWide) Expanded(flex: 4, child: setupPanel),
-                    if (!isWide) setupPanel,
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: DecoratedBox(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color(0xFFFFF1A8),
+                    Color(0xFFA7E8FF),
+                    Color(0xFFFFC4D6),
                   ],
+                ),
+              ),
+              child: SafeArea(
+                child: Center(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(28),
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 1040),
+                      child: Flex(
+                        direction: isWide ? Axis.horizontal : Axis.vertical,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          if (isWide) Expanded(flex: 5, child: heroPanel),
+                          if (!isWide) heroPanel,
+                          SizedBox(
+                              width: isWide ? 28 : 0, height: isWide ? 0 : 24),
+                          if (isWide) Expanded(flex: 4, child: setupPanel),
+                          if (!isWide) setupPanel,
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
           ),
-        ),
+          const Positioned(
+            left: 16,
+            bottom: 14,
+            child: AppFooter(),
+          ),
+        ],
       ),
     );
   }

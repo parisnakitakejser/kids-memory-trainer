@@ -125,6 +125,43 @@ class AppStrings {
         da: 'Spilindstillinger',
       );
 
+  String get createdBy => _pick(
+        en: 'Created by Paris Nakita Kejser',
+        da: 'Lavet af Paris Nakita Kejser',
+      );
+
+  String get updateAvailable => _pick(
+        en: 'New Version Available',
+        da: 'Ny version tilgængelig',
+      );
+
+  String updateAvailableBody(String version) => _pick(
+        en: 'Version $version is ready to download and install.',
+        da: 'Version $version er klar til download og installation.',
+      );
+
+  String get downloadAndInstall => _pick(
+        en: 'Download and Install',
+        da: 'Download og installer',
+      );
+
+  String get later => _pick(en: 'Later', da: 'Senere');
+
+  String get downloadingUpdate => _pick(
+        en: 'Downloading update...',
+        da: 'Downloader opdatering...',
+      );
+
+  String get updateOpened => _pick(
+        en: 'The update was downloaded and opened.',
+        da: 'Opdateringen blev downloadet og åbnet.',
+      );
+
+  String get updateFailed => _pick(
+        en: 'Could not download the update right now.',
+        da: 'Kunne ikke downloade opdateringen lige nu.',
+      );
+
   String get languageLabel => _pick(en: 'Language', da: 'Sprog');
 
   String get close => _pick(en: 'Close', da: 'Luk');
