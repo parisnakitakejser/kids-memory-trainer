@@ -30,7 +30,7 @@ class _MainMenuState extends State<MainMenu> {
   }
 
   void _startMultiPlayer() {
-    if (_player1Controller.text.trim().isEmpty || 
+    if (_player1Controller.text.trim().isEmpty ||
         _player2Controller.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please enter names for both players.')),
@@ -66,7 +66,7 @@ class _MainMenuState extends State<MainMenu> {
               borderRadius: BorderRadius.circular(24),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.3),
+                  color: Colors.black.withValues(alpha: 0.3),
                   blurRadius: 15,
                   offset: const Offset(0, 8),
                 )
@@ -95,16 +95,22 @@ class _MainMenuState extends State<MainMenu> {
                   ),
                 ),
                 const SizedBox(height: 40),
-                
+
                 // Theme Selector
-                const Text('Select Theme', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                const Text('Select Theme',
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                 const SizedBox(height: 12),
                 SegmentedButton<GameTheme>(
                   segments: const [
-                    ButtonSegment(value: GameTheme.animals, label: Text('🐼 Animals')),
-                    ButtonSegment(value: GameTheme.numbers, label: Text('🔢 Numbers')),
-                    ButtonSegment(value: GameTheme.letters, label: Text('🔠 Letters')),
-                    ButtonSegment(value: GameTheme.colors, label: Text('🎨 Colors')),
+                    ButtonSegment(
+                        value: GameTheme.animals, label: Text('🐼 Animals')),
+                    ButtonSegment(
+                        value: GameTheme.numbers, label: Text('🔢 Numbers')),
+                    ButtonSegment(
+                        value: GameTheme.letters, label: Text('🔠 Letters')),
+                    ButtonSegment(
+                        value: GameTheme.colors, label: Text('🎨 Colors')),
                   ],
                   selected: {_selectedTheme},
                   onSelectionChanged: (Set<GameTheme> newSelection) {
@@ -113,11 +119,13 @@ class _MainMenuState extends State<MainMenu> {
                     });
                   },
                 ),
-                
+
                 const SizedBox(height: 32),
-                
+
                 // Grid Size Selector
-                const Text('Select Grid Size', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                const Text('Select Grid Size',
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                 const SizedBox(height: 12),
                 SegmentedButton<int>(
                   segments: const [
@@ -142,19 +150,23 @@ class _MainMenuState extends State<MainMenu> {
                   child: FilledButton.icon(
                     onPressed: _startSinglePlayer,
                     icon: const Icon(Icons.timer),
-                    label: const Text('Single Player (Time Trial)', style: TextStyle(fontSize: 18)),
+                    label: const Text('Single Player (Time Trial)',
+                        style: TextStyle(fontSize: 18)),
                   ),
                 ),
                 const SizedBox(height: 32),
                 const Divider(),
                 const SizedBox(height: 16),
-                const Text('Local Multiplayer', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                const Text('Local Multiplayer',
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                 const SizedBox(height: 16),
                 TextField(
                   controller: _player1Controller,
                   decoration: InputDecoration(
                     labelText: 'Player 1 Name',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12)),
                     prefixIcon: const Icon(Icons.person),
                   ),
                 ),
@@ -163,7 +175,8 @@ class _MainMenuState extends State<MainMenu> {
                   controller: _player2Controller,
                   decoration: InputDecoration(
                     labelText: 'Player 2 Name',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12)),
                     prefixIcon: const Icon(Icons.person_outline),
                   ),
                 ),
@@ -174,18 +187,21 @@ class _MainMenuState extends State<MainMenu> {
                   child: FilledButton.tonalIcon(
                     onPressed: _startMultiPlayer,
                     icon: const Icon(Icons.people),
-                    label: const Text('Start Multiplayer', style: TextStyle(fontSize: 18)),
+                    label: const Text('Start Multiplayer',
+                        style: TextStyle(fontSize: 18)),
                   ),
                 ),
                 const SizedBox(height: 32),
                 TextButton.icon(
                   onPressed: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const LeaderboardScreen()),
+                      MaterialPageRoute(
+                          builder: (_) => const LeaderboardScreen()),
                     );
                   },
                   icon: const Icon(Icons.leaderboard),
-                  label: const Text('View Leaderboard', style: TextStyle(fontSize: 16)),
+                  label: const Text('View Leaderboard',
+                      style: TextStyle(fontSize: 16)),
                 ),
               ],
             ),

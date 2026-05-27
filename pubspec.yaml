@@ -22,3 +22,7 @@ flutter:
   uses-material-design: true
   assets:
     - images/
+    - assets/animals/
+    - assets/numbers/
+    - assets/letters/
+    - assets/colors/

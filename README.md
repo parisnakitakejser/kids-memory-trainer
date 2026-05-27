@@ -1,54 +1,186 @@
 # macOS Memory Game
 
-A visually appealing, high-performance macOS memory game built with Flutter.
+A kid-friendly memory matching game built with Flutter for macOS.
 
 ![Kids Memory Trainer](images/kids-memory-trainer.png)
 
 ## Features
 
-- **Massive 12x12 Grid:** Challenge your memory with 144 cards (72 distinct, procedurally generated color pairs).
-- **Single-Player Time Trial:** Clear the board as fast as possible. Your fastest times are recorded.
-- **Local Multiplayer (Hotseat):** Play against a friend on the same Mac. Take turns finding matches to score points.
-- **Local Leaderboards:** Persistent local storage for both Single-Player fastest times and Multiplayer high scores.
-- **3D Animations:** Smooth card flipping animations utilizing Flutter's `Transform` matrix.
-- **Native macOS Feel:** Styled with dark mode defaults and standard typography to feel at home on macOS.
+- Single-player time trial with local best times.
+- Local two-player hotseat mode.
+- Grid sizes from 4x4 up to 12x12.
+- Theme choices for animals, numbers, letters, and colors.
+- Custom image assets for card faces.
+- Emoji, number, letter, and color fallbacks when custom images are missing.
+- Local leaderboards saved with `shared_preferences`.
+- Animated 3D card flips.
 
-## Getting Started
+## Requirements
 
-### Prerequisites
-- [Flutter SDK](https://flutter.dev/docs/get-started/install) (version 3.3.0 or higher)
-- macOS (for native desktop execution)
+- macOS
+- Flutter SDK `3.3.0` or newer
+- Xcode with macOS desktop build tools
 
-### Installation & Running
+Check your setup with:
 
-1. **Clone or navigate to the project directory:**
-   ```bash
-   cd path/to/flutter-test
-   ```
+```bash
+flutter doctor
+```
 
-2. **Generate the native macOS runner:**
-   Because this project is configured for macOS, ensure the platform scaffolding is generated:
-   ```bash
-   flutter create . --platforms=macos
-   ```
+If macOS desktop support is not enabled:
 
-3. **Install Dependencies:**
-   Fetch the required packages (`shared_preferences`, `uuid`):
-   ```bash
-   flutter pub get
-   ```
+```bash
+flutter config --enable-macos-desktop
+```
 
-4. **Run the Application:**
-   Launch the game natively on your Mac:
-   ```bash
-   flutter run -d macos
-   ```
+## Run The App
+
+From the project folder:
+
+```bash
+flutter pub get
+flutter run -d macos
+```
+
+## Custom Card Assets
+
+The game can use images from the `assets` folder before falling back to built-in symbols.
+
+Asset folders:
+
+```text
+assets/animals/
+assets/numbers/
+assets/letters/
+assets/colors/
+```
+
+Add image files to the folder for the theme you want to customize. For example:
+
+```text
+assets/animals/1.png
+assets/animals/2.png
+assets/animals/3.png
+assets/numbers/1.png
+assets/letters/a.png
+```
+
+Supported image formats:
+
+```text
+.png .jpg .jpeg .webp .gif .avif
+```
+
+Recommended image size:
+
+```text
+512 x 512 px PNG
+```
+
+Square images work best. Transparent PNGs are a good choice because the card color can still show around the image. Larger images such as `1024 x 1024 px` are also fine, but they will be scaled down inside the card.
+
+### Fallback Behavior
+
+Each board needs one unique face per pair.
+
+Examples:
+
+- A `4x4` board needs 8 unique faces.
+- A `6x6` board needs 18 unique faces.
+- A `12x12` board needs 72 unique faces.
+
+If a theme folder has enough images, the game uses those images. If it does not have enough images, the remaining pairs use fallback content:
+
+- Animals use emoji.
+- Numbers use numbers.
+- Letters use letters.
+- Colors use generated card colors.
+
+So if `assets/animals/` has 12 images and the player starts a `6x6` game, the first 12 pairs use images and the remaining 6 pairs use animal emoji.
+
+After adding new assets, run:
+
+```bash
+flutter pub get
+```
+
+Then restart the app.
+
+## Project Structure
+
+```text
+lib/main.dart                         App entry point
+lib/screens/main_menu.dart            Main menu and game setup
+lib/screens/game_screen.dart          Game board screen
+lib/widgets/memory_card.dart          Card UI and flip animation
+lib/models/game_state.dart            Game rules and state
+lib/services/theme_asset_service.dart Asset folder loading
+lib/services/storage_service.dart     Local leaderboard storage
+assets/                              Custom card images
+images/                              README and app images
+```
+
+## Test And Analyze
+
+Run these before building a release:
+
+```bash
+flutter analyze
+flutter test
+```
+
+## Build A Final macOS App
+
+Create a release build:
+
+```bash
+flutter build macos --release
+```
+
+The built app will be here:
+
+```text
+build/macos/Build/Products/Release/memory_game.app
+```
+
+You can open it directly from Finder, or run:
+
+```bash
+open build/macos/Build/Products/Release/memory_game.app
+```
+
+To make a zip file that is easier to share:
+
+```bash
+ditto -c -k --sequesterRsrc --keepParent build/macos/Build/Products/Release/memory_game.app memory_game-macos.zip
+```
+
+The zip file will be created at:
+
+```text
+memory_game-macos.zip
+```
+
+### Sharing Outside Your Mac
+
+For personal use, the release `.app` is usually enough.
+
+For sharing with other people, macOS may warn that the app is from an unidentified developer unless it is signed and notarized with an Apple Developer account. For wider distribution, update the bundle identifier in:
+
+```text
+macos/Runner/Configs/AppInfo.xcconfig
+```
+
+Then build, sign, and notarize the app using Apple tooling.
 
 ## Tech Stack
-- **Framework:** Flutter
-- **Language:** Dart
-- **Storage:** `shared_preferences` for local leaderboard persistence
-- **State Management:** Flutter `ChangeNotifier`
+
+- Flutter
+- Dart
+- `shared_preferences` for local leaderboard persistence
+- `uuid` for card IDs
+- Flutter `ChangeNotifier` for game state
 
 ## License
-This project is for demonstration and learning purposes.
+
+This project is licensed under the Apache License 2.0. See [LICENSE](LICENSE).

@@ -14,89 +14,149 @@ class MemoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 400),
-        curve: Curves.easeInOut,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 4,
-              offset: const Offset(2, 2),
-            )
-          ],
-        ),
-        child: TweenAnimationBuilder(
-          tween: Tween<double>(begin: 0, end: card.isFaceUp || card.isMatched ? 1 : 0),
-          duration: const Duration(milliseconds: 400),
-          builder: (context, double value, child) {
-            bool isUnder = value > 0.5;
-            
-            return Transform(
-              transform: Matrix4.identity()
-                ..setEntry(3, 2, 0.001)
-                ..rotateY(value * pi),
-              alignment: Alignment.center,
-              child: isUnder
-                  ? Transform(
-                      transform: Matrix4.identity()..rotateY(pi),
-                      alignment: Alignment.center,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: card.isMatched ? card.color.withOpacity(0.3) : card.color.withOpacity(0.9),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: card.isMatched ? Colors.white : Colors.white54,
-                            width: card.isMatched ? 3 : 1,
-                          )
+    return IgnorePointer(
+      ignoring: card.isMatched,
+      child: TweenAnimationBuilder<double>(
+        tween: Tween<double>(end: card.isMatched ? 1 : 0),
+        duration: const Duration(milliseconds: 700),
+        curve: Curves.linear,
+        builder: (context, matchValue, child) {
+          final safeValue = matchValue.clamp(0.0, 1.0);
+          final disappearValue = Curves.easeIn.transform(safeValue);
+          final popValue = Curves.easeOutBack.transform(safeValue);
+          final popScale = 1 + (sin(popValue * pi) * 0.18);
+          final shrinkScale = 1 - (disappearValue * 0.92);
+          final wobble = sin(safeValue * pi * 4) * 0.08 * (1 - safeValue);
+          final opacity = (1 - disappearValue).clamp(0.0, 1.0);
+
+          return Opacity(
+            opacity: opacity,
+            child: Transform.translate(
+              offset: Offset(0, -18 * disappearValue),
+              child: Transform.rotate(
+                angle: wobble,
+                child: Transform.scale(
+                  scale: popScale * shrinkScale,
+                  child: child,
+                ),
+              ),
+            ),
+          );
+        },
+        child: GestureDetector(
+          onTap: onTap,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.easeInOut,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.2),
+                  blurRadius: 4,
+                  offset: const Offset(2, 2),
+                )
+              ],
+            ),
+            child: TweenAnimationBuilder(
+              tween: Tween<double>(
+                  begin: 0, end: card.isFaceUp || card.isMatched ? 1 : 0),
+              duration: const Duration(milliseconds: 400),
+              builder: (context, double value, child) {
+                bool isUnder = value > 0.5;
+
+                return Transform(
+                  transform: Matrix4.identity()
+                    ..setEntry(3, 2, 0.001)
+                    ..rotateY(value * pi),
+                  alignment: Alignment.center,
+                  child: isUnder
+                      ? Transform(
+                          transform: Matrix4.identity()..rotateY(pi),
+                          alignment: Alignment.center,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: card.color.withValues(alpha: 0.9),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: Colors.white54,
+                                  width: 1,
+                                )),
+                            child: LayoutBuilder(
+                              builder: (context, constraints) {
+                                final symbolSize =
+                                    (constraints.biggest.shortestSide * 0.62)
+                                        .clamp(34.0, 64.0);
+
+                                return Center(
+                                  child: card.assetPath != null
+                                      ? ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          child: Image.asset(
+                                            card.assetPath!,
+                                            width: double.infinity,
+                                            height: double.infinity,
+                                            fit: BoxFit.cover,
+                                            errorBuilder:
+                                                (context, error, stackTrace) {
+                                              return const Icon(
+                                                Icons
+                                                    .image_not_supported_rounded,
+                                                color: Colors.white,
+                                                size: 32,
+                                              );
+                                            },
+                                          ),
+                                        )
+                                      : card.content != null
+                                          ? Text(
+                                              card.content!,
+                                              style: TextStyle(
+                                                fontSize: symbolSize,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white,
+                                                shadows: [
+                                                  Shadow(
+                                                    color: Colors.black
+                                                        .withValues(alpha: 0.5),
+                                                    offset: const Offset(1, 1),
+                                                    blurRadius: 2,
+                                                  )
+                                                ],
+                                              ),
+                                            )
+                                          : null,
+                                );
+                              },
+                            ),
+                          ),
+                        )
+                      : Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  Colors.blueGrey.shade600,
+                                  Colors.blueGrey.shade800,
+                                ]),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                                color: Colors.blueGrey.shade400, width: 2),
+                          ),
+                          child: const Center(
+                            child: Icon(
+                              Icons.star_rounded,
+                              color: Colors.white38,
+                              size: 36,
+                            ),
+                          ),
                         ),
-                        child: Center(
-                          child: card.content != null
-                              ? Text(
-                                  card.content!,
-                                  style: TextStyle(
-                                    fontSize: 28,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                    shadows: [
-                                      Shadow(
-                                        color: Colors.black.withOpacity(0.5),
-                                        offset: const Offset(1, 1),
-                                        blurRadius: 2,
-                                      )
-                                    ],
-                                  ),
-                                )
-                              : null,
-                        ),
-                      ),
-                    )
-                  : Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            Colors.blueGrey.shade600,
-                            Colors.blueGrey.shade800,
-                          ]
-                        ),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.blueGrey.shade400, width: 2),
-                      ),
-                      child: const Center(
-                        child: Icon(
-                          Icons.star_rounded,
-                          color: Colors.white38,
-                          size: 36,
-                        ),
-                      ),
-                    ),
-            );
-          },
+                );
+              },
+            ),
+          ),
         ),
       ),
     );

@@ -8,7 +8,8 @@ class LeaderboardScreen extends StatefulWidget {
   State<LeaderboardScreen> createState() => _LeaderboardScreenState();
 }
 
-class _LeaderboardScreenState extends State<LeaderboardScreen> with SingleTickerProviderStateMixin {
+class _LeaderboardScreenState extends State<LeaderboardScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final StorageService _storageService = StorageService();
 
@@ -59,7 +60,9 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> with SingleTicker
           ),
           title: Text(entry.playerName),
           trailing: Text(
-            isTimeBased ? _formatTime(entry.timeInSeconds) : '${entry.score} pts',
+            isTimeBased
+                ? _formatTime(entry.timeInSeconds)
+                : '${entry.score} pts',
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
           ),
         );
