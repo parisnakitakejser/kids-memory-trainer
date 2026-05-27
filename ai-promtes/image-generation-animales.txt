@@ -1,0 +1,49 @@
+Create a 1024x1024 kawaii-style memory card illustration for a children's memory game.
+
+Animal: <animal>
+Main color theme: <color>
+
+Style requirements:
+- Ultra cute chibi/kawaii art style
+- Big glossy eyes
+- Small rounded body
+- Soft fluffy textures
+- Rosy cheeks
+- Happy innocent expression
+- Thick clean outline
+- High-detail cartoon rendering
+- Cute mobile game art style
+- Child-friendly design
+- Polished game asset quality
+- Centered composition
+- No text
+- No border
+- No frame
+- Vibrant but soft colors
+- Cozy and magical atmosphere
+- Soft fantasy lighting
+- Sticker-like readability
+- Consistent art style for a kids memory game
+
+Background requirements:
+- Soft colorful kids-game background
+- Smooth pastel gradients
+- Rounded soft shapes in the background
+- Warm playful atmosphere
+- Cute mobile puzzle game feeling
+- Dreamy colorful lighting
+- Subtle sparkles and floating particles
+- Background colors should match the animal theme
+- Background should feel cozy, safe, happy, and magical
+- Similar feeling to modern children's mobile games
+- Background should support the character without stealing focus
+
+Character effects:
+- Soft glow around the character
+- Tiny stars, hearts, bubbles, or sparkles
+- Gentle shadow under the character
+- Magical cute atmosphere
+
+Optional:
+- The animal may hold a cute object related to itself
+- Add tiny decorative environment details matching the animal
