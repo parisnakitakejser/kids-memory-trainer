@@ -64,6 +64,7 @@ class GameState extends ChangeNotifier {
   // Interaction state
   CardModel? firstCard;
   CardModel? secondCard;
+  CardModel? matchPreviewCard;
   bool isProcessing = false;
   bool isGameOver = false;
 
@@ -347,13 +348,15 @@ class GameState extends ChangeNotifier {
     if (isMatch) {
       firstCard!.isMatched = true;
       secondCard!.isMatched = true;
+      matchPreviewCard = firstCard;
 
       if (isMultiplayer) {
         currentPlayer.score++;
         currentPlayer.matchedCards.add(firstCard!);
       }
 
-      _checkGameOver();
+      notifyListeners();
+      return;
     } else {
       await Future.delayed(const Duration(milliseconds: 1000));
       firstCard!.isFaceUp = false;
@@ -367,6 +370,17 @@ class GameState extends ChangeNotifier {
     firstCard = null;
     secondCard = null;
     isProcessing = false;
+    notifyListeners();
+  }
+
+  void acknowledgeMatchPreview() {
+    if (matchPreviewCard == null) return;
+
+    matchPreviewCard = null;
+    firstCard = null;
+    secondCard = null;
+    isProcessing = false;
+    _checkGameOver();
     notifyListeners();
   }
 

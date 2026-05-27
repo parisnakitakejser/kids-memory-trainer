@@ -293,6 +293,7 @@ class _SetupPanel extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: SegmentedButton<PlayerMode>(
+                showSelectedIcon: false,
                 segments: [
                   ButtonSegment(
                     value: PlayerMode.single,
@@ -321,6 +322,7 @@ class _SetupPanel extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: SegmentedButton<int>(
+                showSelectedIcon: false,
                 segments: const [
                   ButtonSegment(value: 4, label: Text('4x4')),
                   ButtonSegment(value: 6, label: Text('6x6')),

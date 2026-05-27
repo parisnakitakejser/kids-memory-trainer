@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../app_settings.dart';
 import '../l10n/app_strings.dart';
 import '../models/game_state.dart';
@@ -30,6 +31,7 @@ class _GameScreenState extends State<GameScreen> {
   GameState? _gameState;
   final StorageService _storageService = StorageService();
   late int _activeGridSize;
+  String? _lastMatchSoundCardId;
   bool _gameOverHandled = false;
 
   @override
@@ -59,6 +61,7 @@ class _GameScreenState extends State<GameScreen> {
 
     setState(() {
       _gameState = gameState;
+      _lastMatchSoundCardId = null;
       _gameOverHandled = false;
     });
   }
@@ -73,6 +76,14 @@ class _GameScreenState extends State<GameScreen> {
   void _onGameStateChanged() {
     final gameState = _gameState;
     if (gameState == null) return;
+
+    final matchPreviewCard = gameState.matchPreviewCard;
+    if (matchPreviewCard != null &&
+        matchPreviewCard.id != _lastMatchSoundCardId) {
+      _lastMatchSoundCardId = matchPreviewCard.id;
+      SystemSound.play(SystemSoundType.alert);
+      HapticFeedback.mediumImpact();
+    }
 
     if (gameState.isGameOver && !_gameOverHandled) {
       _gameOverHandled = true;
@@ -180,6 +191,7 @@ class _GameScreenState extends State<GameScreen> {
                         style: const TextStyle(fontWeight: FontWeight.w900)),
                     const SizedBox(height: 12),
                     SegmentedButton<int>(
+                      showSelectedIcon: false,
                       segments: const [
                         ButtonSegment(value: 4, label: Text('4x4')),
                         ButtonSegment(value: 6, label: Text('6x6')),
@@ -276,7 +288,17 @@ class _GameScreenState extends State<GameScreen> {
       ),
       body: gameState == null
           ? const Center(child: CircularProgressIndicator())
-          : _buildGameBody(context, gameState),
+          : Stack(
+              children: [
+                _buildGameBody(context, gameState),
+                if (gameState.matchPreviewCard != null)
+                  MatchCelebrationOverlay(
+                    card: gameState.matchPreviewCard!,
+                    title: strings.matchFound,
+                    onDismiss: gameState.acknowledgeMatchPreview,
+                  ),
+              ],
+            ),
     );
   }
 
@@ -640,6 +662,156 @@ class _MatchedCardTile extends StatelessWidget {
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+      ),
+    );
+  }
+}
+
+class MatchCelebrationOverlay extends StatefulWidget {
+  final CardModel card;
+  final String title;
+  final VoidCallback onDismiss;
+
+  const MatchCelebrationOverlay({
+    super.key,
+    required this.card,
+    required this.title,
+    required this.onDismiss,
+  });
+
+  @override
+  State<MatchCelebrationOverlay> createState() =>
+      _MatchCelebrationOverlayState();
+}
+
+class _MatchCelebrationOverlayState extends State<MatchCelebrationOverlay> {
+  bool _visible = true;
+  bool _dismissed = false;
+
+  void _dismiss() {
+    if (_dismissed) return;
+
+    setState(() {
+      _visible = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned.fill(
+      child: Material(
+        color: const Color(0xFF22304A).withValues(alpha: 0.28),
+        child: InkWell(
+          onTap: _dismiss,
+          child: Center(
+            child: TweenAnimationBuilder<double>(
+              tween: Tween<double>(end: _visible ? 1 : 0),
+              duration: Duration(milliseconds: _visible ? 520 : 260),
+              curve: Curves.easeOutBack,
+              onEnd: () {
+                if (_visible || _dismissed) return;
+
+                _dismissed = true;
+                widget.onDismiss();
+              },
+              builder: (context, value, child) {
+                final safeValue = value.clamp(0.0, 1.0);
+                final angle = (1 - safeValue) * math.pi / 2;
+                final scale = 0.72 + safeValue * 0.28;
+
+                return Opacity(
+                  opacity: safeValue,
+                  child: Transform(
+                    alignment: Alignment.center,
+                    transform: Matrix4.identity()
+                      ..setEntry(3, 2, 0.001)
+                      ..rotateY(angle)
+                      ..scaleByDouble(scale, scale, scale, 1),
+                    child: child,
+                  ),
+                );
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    widget.title,
+                    style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w900,
+                      shadows: [
+                        Shadow(
+                          color:
+                              const Color(0xFF22304A).withValues(alpha: 0.45),
+                          blurRadius: 12,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 18),
+                  SizedBox.square(
+                    dimension: 260,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(30),
+                        border: Border.all(color: Colors.white, width: 6),
+                        boxShadow: [
+                          BoxShadow(
+                            color:
+                                const Color(0xFF22304A).withValues(alpha: 0.25),
+                            blurRadius: 30,
+                            offset: const Offset(0, 18),
+                          ),
+                        ],
+                      ),
+                      child: _CelebrationCardFace(card: widget.card),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _CelebrationCardFace extends StatelessWidget {
+  final CardModel card;
+
+  const _CelebrationCardFace({required this.card});
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(24),
+      child: DecoratedBox(
+        decoration: BoxDecoration(color: card.color.withValues(alpha: 0.9)),
+        child: card.assetPath != null
+            ? Image.asset(
+                card.assetPath!,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return const Icon(
+                    Icons.image_not_supported_rounded,
+                    color: Colors.white,
+                    size: 70,
+                  );
+                },
+              )
+            : Center(
+                child: Text(
+                  card.content ?? '',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 96,
+                    fontWeight: FontWeight.w900,
                   ),
                 ),
               ),

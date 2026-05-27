@@ -147,6 +147,8 @@ class AppStrings {
 
   String get matches => _pick(en: 'Matches', da: 'Stik');
 
+  String get matchFound => _pick(en: 'Match!', da: 'Stik!');
+
   String get score => _pick(en: 'Score', da: 'Point');
 
   String get gameOver => _pick(en: 'Game Over!', da: 'Spillet er slut!');
