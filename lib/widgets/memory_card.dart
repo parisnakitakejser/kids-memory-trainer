@@ -86,7 +86,7 @@ class MemoryCard extends StatelessWidget {
                               builder: (context, constraints) {
                                 final symbolSize =
                                     (constraints.biggest.shortestSide * 0.62)
-                                        .clamp(34.0, 64.0);
+                                        .clamp(18.0, 64.0);
 
                                 return Center(
                                   child: card.assetPath != null
@@ -145,12 +145,20 @@ class MemoryCard extends StatelessWidget {
                             border: Border.all(
                                 color: Colors.blueGrey.shade400, width: 2),
                           ),
-                          child: const Center(
-                            child: Icon(
-                              Icons.star_rounded,
-                              color: Colors.white38,
-                              size: 36,
-                            ),
+                          child: LayoutBuilder(
+                            builder: (context, constraints) {
+                              final iconSize =
+                                  (constraints.biggest.shortestSide * 0.42)
+                                      .clamp(16.0, 36.0);
+
+                              return Center(
+                                child: Icon(
+                                  Icons.star_rounded,
+                                  color: Colors.white38,
+                                  size: iconSize,
+                                ),
+                              );
+                            },
                           ),
                         ),
                 );

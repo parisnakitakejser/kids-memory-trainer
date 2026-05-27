@@ -42,8 +42,9 @@ class CardModel {
 class Player {
   final String name;
   int score;
+  final List<CardModel> matchedCards;
 
-  Player({required this.name, this.score = 0});
+  Player({required this.name, this.score = 0}) : matchedCards = [];
 }
 
 class GameState extends ChangeNotifier {
@@ -82,6 +83,19 @@ class GameState extends ChangeNotifier {
   Player get currentPlayer => players[currentPlayerIndex];
 
   int get matchedPairs => cards.where((c) => c.isMatched).length ~/ 2;
+
+  List<CardModel> get matchedPairPreviews {
+    final seen = <String>{};
+    final previews = <CardModel>[];
+
+    for (final card in cards) {
+      if (card.isMatched && seen.add(card.matchKey)) {
+        previews.add(card);
+      }
+    }
+
+    return previews;
+  }
 
   static const List<String> _animalEmojis = [
     '🐶',
@@ -336,6 +350,7 @@ class GameState extends ChangeNotifier {
 
       if (isMultiplayer) {
         currentPlayer.score++;
+        currentPlayer.matchedCards.add(firstCard!);
       }
 
       _checkGameOver();

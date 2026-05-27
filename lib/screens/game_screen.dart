@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import '../models/game_state.dart';
 import '../widgets/memory_card.dart';
@@ -153,76 +155,329 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   Widget _buildGameBody(BuildContext context, GameState gameState) {
-    return Column(
-      children: [
-        if (widget.isMultiplayer)
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: gameState.players.map((player) {
-                bool isCurrent = gameState.currentPlayer == player;
-                return AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                  decoration: BoxDecoration(
-                    color: isCurrent
-                        ? Theme.of(context).colorScheme.primaryContainer
-                        : Theme.of(context).colorScheme.surfaceContainerHighest,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: isCurrent
-                          ? Theme.of(context).colorScheme.primary
-                          : Colors.transparent,
-                      width: 2,
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      Text(player.name,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                              color: isCurrent
-                                  ? Theme.of(context)
-                                      .colorScheme
-                                      .onPrimaryContainer
-                                  : null)),
-                      Text('Score: ${player.score}',
-                          style: const TextStyle(
-                              fontSize: 24, fontWeight: FontWeight.w600)),
-                    ],
-                  ),
-                );
-              }).toList(),
-            ),
-          ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                return GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: widget.gridSize,
-                    crossAxisSpacing: 8,
-                    mainAxisSpacing: 8,
-                    childAspectRatio: 1.0,
-                  ),
-                  itemCount: gameState.cards.length,
-                  itemBuilder: (context, index) {
-                    return MemoryCard(
-                      card: gameState.cards[index],
-                      onTap: () => gameState.flipCard(index),
-                    );
-                  },
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final useSideScoreboard = constraints.maxWidth >= 760;
+          final scoreboard = _Scoreboard(
+            gameState: gameState,
+            isMultiplayer: widget.isMultiplayer,
+          );
+          final board = _FittedGameBoard(
+            gameState: gameState,
+            gridSize: widget.gridSize,
+          );
+
+          if (useSideScoreboard) {
+            final scoreboardWidth =
+                (constraints.maxWidth * 0.28).clamp(220.0, 320.0);
+
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(child: board),
+                const SizedBox(width: 16),
+                SizedBox(width: scoreboardWidth, child: scoreboard),
+              ],
+            );
+          }
+
+          return Column(
+            children: [
+              SizedBox(height: 132, child: scoreboard),
+              const SizedBox(height: 12),
+              Expanded(child: board),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _FittedGameBoard extends StatelessWidget {
+  final GameState gameState;
+  final int gridSize;
+
+  const _FittedGameBoard({
+    required this.gameState,
+    required this.gridSize,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final boardSize = constraints.biggest.shortestSide;
+        final spacing = boardSize < 360 ? 6.0 : 8.0;
+
+        return Center(
+          child: SizedBox.square(
+            dimension: boardSize,
+            child: GridView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              padding: EdgeInsets.zero,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: gridSize,
+                crossAxisSpacing: spacing,
+                mainAxisSpacing: spacing,
+                childAspectRatio: 1.0,
+              ),
+              itemCount: gameState.cards.length,
+              itemBuilder: (context, index) {
+                return MemoryCard(
+                  card: gameState.cards[index],
+                  onTap: () => gameState.flipCard(index),
                 );
               },
             ),
           ),
+        );
+      },
+    );
+  }
+}
+
+class _Scoreboard extends StatelessWidget {
+  final GameState gameState;
+  final bool isMultiplayer;
+
+  const _Scoreboard({
+    required this.gameState,
+    required this.isMultiplayer,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: colorScheme.outlineVariant),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: isMultiplayer
+            ? _MultiplayerScores(gameState: gameState)
+            : _SinglePlayerScores(gameState: gameState),
+      ),
+    );
+  }
+}
+
+class _SinglePlayerScores extends StatelessWidget {
+  final GameState gameState;
+
+  const _SinglePlayerScores({required this.gameState});
+
+  @override
+  Widget build(BuildContext context) {
+    final matchedCards = gameState.matchedPairPreviews;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _ScoreHeader(
+          title: 'Matches',
+          score: '${gameState.matchedPairs}',
+        ),
+        const SizedBox(height: 12),
+        Expanded(
+          child: _MatchedCardWrap(cards: matchedCards),
         ),
       ],
+    );
+  }
+}
+
+class _MultiplayerScores extends StatelessWidget {
+  final GameState gameState;
+
+  const _MultiplayerScores({required this.gameState});
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isCompact = constraints.maxHeight < 180;
+
+        if (isCompact) {
+          return Row(
+            children: gameState.players.map((player) {
+              return Expanded(
+                child: _PlayerScorePanel(
+                  player: player,
+                  isCurrent: gameState.currentPlayer == player,
+                  compact: true,
+                ),
+              );
+            }).toList(),
+          );
+        }
+
+        return Column(
+          children: gameState.players.map((player) {
+            return Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(
+                  bottom: player == gameState.players.last ? 0 : 10,
+                ),
+                child: _PlayerScorePanel(
+                  player: player,
+                  isCurrent: gameState.currentPlayer == player,
+                ),
+              ),
+            );
+          }).toList(),
+        );
+      },
+    );
+  }
+}
+
+class _PlayerScorePanel extends StatelessWidget {
+  final Player player;
+  final bool isCurrent;
+  final bool compact;
+
+  const _PlayerScorePanel({
+    required this.player,
+    required this.isCurrent,
+    this.compact = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 250),
+      margin: EdgeInsets.symmetric(horizontal: compact ? 4 : 0),
+      padding: EdgeInsets.all(compact ? 8 : 10),
+      decoration: BoxDecoration(
+        color: isCurrent ? colorScheme.primaryContainer : colorScheme.surface,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: isCurrent ? colorScheme.primary : colorScheme.outlineVariant,
+          width: isCurrent ? 2 : 1,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _ScoreHeader(title: player.name, score: '${player.score}'),
+          if (!compact) const SizedBox(height: 10),
+          if (!compact)
+            Expanded(child: _MatchedCardWrap(cards: player.matchedCards)),
+        ],
+      ),
+    );
+  }
+}
+
+class _ScoreHeader extends StatelessWidget {
+  final String title;
+  final String score;
+
+  const _ScoreHeader({
+    required this.title,
+    required this.score,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
+    return Row(
+      children: [
+        Expanded(
+          child: Text(
+            title,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+          ),
+        ),
+        const SizedBox(width: 8),
+        Text(
+          score,
+          style: textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
+        ),
+      ],
+    );
+  }
+}
+
+class _MatchedCardWrap extends StatelessWidget {
+  final List<CardModel> cards;
+
+  const _MatchedCardWrap({required this.cards});
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        const spacing = 6.0;
+        const columns = 4;
+        final rows = (cards.length / columns).ceil().clamp(1, 99);
+        final widthSize =
+            (constraints.maxWidth - spacing * (columns - 1)) / columns;
+        final heightSize =
+            (constraints.maxHeight - spacing * (rows - 1)) / rows;
+        final tileSize = math.min(widthSize, heightSize).clamp(18.0, 48.0);
+
+        return Wrap(
+          spacing: spacing,
+          runSpacing: spacing,
+          children: cards.map((card) {
+            return SizedBox.square(
+              dimension: tileSize,
+              child: _MatchedCardTile(card: card),
+            );
+          }).toList(),
+        );
+      },
+    );
+  }
+}
+
+class _MatchedCardTile extends StatelessWidget {
+  final CardModel card;
+
+  const _MatchedCardTile({required this.card});
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: card.color.withValues(alpha: 0.9),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.white70),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: card.assetPath != null
+            ? Image.asset(
+                card.assetPath!,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return const Icon(Icons.image_not_supported_rounded,
+                      color: Colors.white);
+                },
+              )
+            : Center(
+                child: Text(
+                  card.content ?? '',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+      ),
     );
   }
 }
