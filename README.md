@@ -173,6 +173,54 @@ macos/Runner/Configs/AppInfo.xcconfig
 
 Then build, sign, and notarize the app using Apple tooling.
 
+## GitHub Release Builds
+
+This project includes a GitHub Actions workflow that builds a downloadable macOS app when you push a release tag.
+
+Tag format:
+
+```text
+v*
+```
+
+Examples:
+
+```text
+v1.0.0
+v1.1.0
+v2.0.0-beta.1
+```
+
+To create and push a release tag:
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+GitHub Actions will then:
+
+- install Flutter
+- run `flutter analyze`
+- run `flutter test`
+- build the macOS release app
+- package `memory_game.app` into a zip file
+- upload the zip to the GitHub Release
+
+The release download will be named like:
+
+```text
+memory_game-macos-v1.0.0.zip
+```
+
+The workflow file is:
+
+```text
+.github/workflows/macos-release.yml
+```
+
+You can also run the workflow manually from the GitHub Actions tab. Manual runs upload the zip as a workflow artifact, but only tag builds upload the zip to a GitHub Release.
+
 ## Tech Stack
 
 - Flutter
