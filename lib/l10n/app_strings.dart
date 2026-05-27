@@ -158,6 +158,13 @@ class AppStrings {
         da: 'Vinder: $name',
       );
 
+  String get winnerPortalTitle => _pick(en: 'Winner!', da: 'Vinder!');
+
+  String winnerScore(int score) => _pick(
+        en: '$score matches',
+        da: '$score stik',
+      );
+
   String completedIn(int seconds) => _pick(
         en: 'Completed in $seconds seconds!',
         da: 'Klar på $seconds sekunder!',

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import '../app_settings.dart';
 import '../l10n/app_strings.dart';
 import '../models/game_state.dart';
+import '../services/sound_service.dart';
 import '../widgets/memory_card.dart';
 import '../services/storage_service.dart';
 import '../services/theme_asset_service.dart';
@@ -81,7 +82,7 @@ class _GameScreenState extends State<GameScreen> {
     if (matchPreviewCard != null &&
         matchPreviewCard.id != _lastMatchSoundCardId) {
       _lastMatchSoundCardId = matchPreviewCard.id;
-      SystemSound.play(SystemSoundType.alert);
+      SoundService.playMatch();
       HapticFeedback.mediumImpact();
     }
 
@@ -116,6 +117,25 @@ class _GameScreenState extends State<GameScreen> {
     }
 
     if (!mounted) return;
+
+    if (widget.isMultiplayer) {
+      final winner =
+          gameState.players.reduce((a, b) => a.score > b.score ? a : b);
+      SoundService.playWinnerApplause();
+      HapticFeedback.heavyImpact();
+
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => _WinnerPortalDialog(
+          winnerName: winner.name,
+          scoreText: strings.winnerScore(winner.score),
+          title: strings.winnerPortalTitle,
+          mainMenuLabel: strings.mainMenu,
+        ),
+      );
+      return;
+    }
 
     showDialog(
       context: context,
@@ -702,81 +722,192 @@ class _MatchCelebrationOverlayState extends State<MatchCelebrationOverlay> {
   @override
   Widget build(BuildContext context) {
     return Positioned.fill(
-      child: Material(
-        color: const Color(0xFF22304A).withValues(alpha: 0.28),
-        child: InkWell(
-          onTap: _dismiss,
-          child: Center(
-            child: TweenAnimationBuilder<double>(
-              tween: Tween<double>(end: _visible ? 1 : 0),
-              duration: Duration(milliseconds: _visible ? 520 : 260),
-              curve: Curves.easeOutBack,
-              onEnd: () {
-                if (_visible || _dismissed) return;
+      child: TweenAnimationBuilder<double>(
+        tween: Tween<double>(end: _visible ? 1 : 0),
+        duration: Duration(milliseconds: _visible ? 680 : 360),
+        curve: _visible ? Curves.elasticOut : Curves.easeInBack,
+        onEnd: () {
+          if (_visible || _dismissed) return;
 
-                _dismissed = true;
-                widget.onDismiss();
-              },
-              builder: (context, value, child) {
-                final safeValue = value.clamp(0.0, 1.0);
-                final angle = (1 - safeValue) * math.pi / 2;
-                final scale = 0.72 + safeValue * 0.28;
+          _dismissed = true;
+          widget.onDismiss();
+        },
+        builder: (context, value, child) {
+          final safeValue = value.clamp(0.0, 1.0);
+          final exitProgress = _visible ? 0.0 : 1 - safeValue;
 
-                return Opacity(
-                  opacity: safeValue,
-                  child: Transform(
-                    alignment: Alignment.center,
-                    transform: Matrix4.identity()
-                      ..setEntry(3, 2, 0.001)
-                      ..rotateY(angle)
-                      ..scaleByDouble(scale, scale, scale, 1),
-                    child: child,
-                  ),
-                );
-              },
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    widget.title,
-                    style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w900,
-                      shadows: [
-                        Shadow(
-                          color:
-                              const Color(0xFF22304A).withValues(alpha: 0.45),
-                          blurRadius: 12,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 18),
-                  SizedBox.square(
-                    dimension: 260,
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(30),
-                        border: Border.all(color: Colors.white, width: 6),
-                        boxShadow: [
-                          BoxShadow(
-                            color:
-                                const Color(0xFF22304A).withValues(alpha: 0.25),
-                            blurRadius: 30,
-                            offset: const Offset(0, 18),
+          return Material(
+            color: const Color(0xFF22304A)
+                .withValues(alpha: 0.14 + safeValue * 0.22),
+            child: InkWell(
+              onTap: _dismiss,
+              child: Center(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final cardSize = (constraints.biggest.shortestSide * 0.48)
+                        .clamp(320.0, 420.0);
+                    final introLift = (1 - safeValue) * 90;
+                    final exitLift = exitProgress * -150;
+                    final angle = _visible
+                        ? (1 - safeValue) * math.pi
+                        : -exitProgress * math.pi / 5;
+                    final bounce = _visible ? math.sin(safeValue * math.pi) : 0;
+                    final scale = _visible
+                        ? 0.58 + safeValue * 0.48 + bounce * 0.12
+                        : 1.06 - exitProgress * 0.42;
+
+                    return Opacity(
+                      opacity: safeValue,
+                      child: Transform.translate(
+                        offset: Offset(0, introLift + exitLift),
+                        child: Transform(
+                          alignment: Alignment.center,
+                          transform: Matrix4.identity()
+                            ..setEntry(3, 2, 0.001)
+                            ..rotateY(angle)
+                            ..rotateZ(bounce * 0.08)
+                            ..scaleByDouble(scale, scale, scale, 1),
+                          child: _CelebrationStage(
+                            card: widget.card,
+                            title: widget.title,
+                            cardSize: cardSize,
+                            burstProgress: safeValue,
                           ),
-                        ],
+                        ),
                       ),
-                      child: _CelebrationCardFace(card: widget.card),
-                    ),
-                  ),
-                ],
+                    );
+                  },
+                ),
               ),
             ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _CelebrationStage extends StatelessWidget {
+  final CardModel card;
+  final String title;
+  final double cardSize;
+  final double burstProgress;
+
+  const _CelebrationStage({
+    required this.card,
+    required this.title,
+    required this.cardSize,
+    required this.burstProgress,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final sparkleDistance = 36 + burstProgress * 42;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          title,
+          style: Theme.of(context).textTheme.displayMedium?.copyWith(
+            color: Colors.white,
+            fontWeight: FontWeight.w900,
+            shadows: [
+              Shadow(
+                color: const Color(0xFF22304A).withValues(alpha: 0.45),
+                blurRadius: 12,
+                offset: const Offset(0, 4),
+              ),
+            ],
           ),
         ),
+        const SizedBox(height: 22),
+        SizedBox.square(
+          dimension: cardSize + 110,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              _GlowRing(size: cardSize + 76, opacity: 0.28),
+              _GlowRing(size: cardSize + 38, opacity: 0.42),
+              _Sparkle(offset: Offset(-sparkleDistance, -sparkleDistance)),
+              _Sparkle(
+                  offset: Offset(sparkleDistance, -sparkleDistance * 0.85)),
+              _Sparkle(offset: Offset(-sparkleDistance * 1.1, sparkleDistance)),
+              _Sparkle(offset: Offset(sparkleDistance * 1.05, sparkleDistance)),
+              SizedBox.square(
+                dimension: cardSize,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(36),
+                    border: Border.all(color: Colors.white, width: 8),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFFFFB84D).withValues(alpha: 0.55),
+                        blurRadius: 42,
+                        spreadRadius: 6,
+                      ),
+                      BoxShadow(
+                        color: const Color(0xFF22304A).withValues(alpha: 0.24),
+                        blurRadius: 30,
+                        offset: const Offset(0, 18),
+                      ),
+                    ],
+                  ),
+                  child: _CelebrationCardFace(card: card),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _GlowRing extends StatelessWidget {
+  final double size;
+  final double opacity;
+
+  const _GlowRing({
+    required this.size,
+    required this.opacity,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox.square(
+      dimension: size,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: const Color(0xFFFFD35B).withValues(alpha: opacity),
+        ),
+      ),
+    );
+  }
+}
+
+class _Sparkle extends StatelessWidget {
+  final Offset offset;
+
+  const _Sparkle({required this.offset});
+
+  @override
+  Widget build(BuildContext context) {
+    return Transform.translate(
+      offset: offset,
+      child: const Icon(
+        Icons.star_rounded,
+        color: Color(0xFFFFD35B),
+        size: 42,
+        shadows: [
+          Shadow(
+            color: Color(0x6622304A),
+            blurRadius: 8,
+            offset: Offset(0, 3),
+          ),
+        ],
       ),
     );
   }
@@ -815,6 +946,179 @@ class _CelebrationCardFace extends StatelessWidget {
                   ),
                 ),
               ),
+      ),
+    );
+  }
+}
+
+class _WinnerPortalDialog extends StatelessWidget {
+  final String winnerName;
+  final String scoreText;
+  final String title;
+  final String mainMenuLabel;
+
+  const _WinnerPortalDialog({
+    required this.winnerName,
+    required this.scoreText,
+    required this.title,
+    required this.mainMenuLabel,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      insetPadding: const EdgeInsets.all(32),
+      child: TweenAnimationBuilder<double>(
+        tween: Tween<double>(begin: 0, end: 1),
+        duration: const Duration(milliseconds: 900),
+        curve: Curves.elasticOut,
+        builder: (context, value, child) {
+          final safeValue = value.clamp(0.0, 1.0);
+          final scale = 0.72 + safeValue * 0.28;
+          final spin = (1 - safeValue) * math.pi;
+
+          return Opacity(
+            opacity: safeValue,
+            child: Transform(
+              alignment: Alignment.center,
+              transform: Matrix4.identity()
+                ..setEntry(3, 2, 0.001)
+                ..rotateY(spin)
+                ..scaleByDouble(scale, scale, scale, 1),
+              child: child,
+            ),
+          );
+        },
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xFFFFF1A8),
+                Color(0xFFA7E8FF),
+                Color(0xFFFFC4D6),
+              ],
+            ),
+            borderRadius: BorderRadius.circular(34),
+            border: Border.all(color: Colors.white, width: 6),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFF22304A).withValues(alpha: 0.24),
+                blurRadius: 34,
+                offset: const Offset(0, 20),
+              ),
+            ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(30),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  title,
+                  style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                        color: const Color(0xFF22304A),
+                        fontWeight: FontWeight.w900,
+                      ),
+                ),
+                const SizedBox(height: 22),
+                SizedBox.square(
+                  dimension: 250,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      const _PortalRing(size: 250, color: Color(0xFFFFD35B)),
+                      const _PortalRing(size: 205, color: Color(0xFF6BCEFF)),
+                      const _PortalRing(size: 160, color: Color(0xFFFF7A59)),
+                      CircleAvatar(
+                        radius: 62,
+                        backgroundColor: Colors.white,
+                        child: Text(
+                          winnerName.characters.first.toUpperCase(),
+                          style: const TextStyle(
+                            color: Color(0xFF22304A),
+                            fontSize: 58,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  winnerName,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                        color: const Color(0xFF22304A),
+                        fontWeight: FontWeight.w900,
+                      ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  scoreText,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        color: const Color(0xFFFF7A59),
+                        fontWeight: FontWeight.w900,
+                      ),
+                ),
+                const SizedBox(height: 26),
+                FilledButton.icon(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                  },
+                  icon: const Icon(Icons.home_rounded),
+                  label: Text(mainMenuLabel),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PortalRing extends StatelessWidget {
+  final double size;
+  final Color color;
+
+  const _PortalRing({
+    required this.size,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TweenAnimationBuilder<double>(
+      tween: Tween<double>(begin: 0, end: 1),
+      duration: Duration(milliseconds: 900 + size.round()),
+      curve: Curves.easeOutBack,
+      builder: (context, value, child) {
+        return Transform.rotate(
+          angle: value * math.pi * 2,
+          child: child,
+        );
+      },
+      child: SizedBox.square(
+        dimension: size,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(color: Colors.white, width: 5),
+            gradient: SweepGradient(
+              colors: [
+                color.withValues(alpha: 0.25),
+                color,
+                Colors.white,
+                color.withValues(alpha: 0.25),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

@@ -23,6 +23,7 @@ flutter:
   assets:
     - images/
     - assets/animals/
+    - assets/sounds/
     - assets/numbers/
     - assets/letters/
     - assets/colors/
