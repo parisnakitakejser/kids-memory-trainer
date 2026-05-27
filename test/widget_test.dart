@@ -7,7 +7,9 @@ void main() {
     await tester.pumpWidget(const MemoryGameApp());
 
     expect(find.text('Kids Memory Game'), findsOneWidget);
-    expect(find.text('Select Theme'), findsOneWidget);
-    expect(find.text('Single Player (Time Trial)'), findsOneWidget);
+    expect(find.text('Player Mode'), findsOneWidget);
+    expect(find.text('Card Mode'), findsOneWidget);
+    expect(find.text('Animals'), findsOneWidget);
+    expect(find.text('Start Single Player'), findsOneWidget);
   });
 }

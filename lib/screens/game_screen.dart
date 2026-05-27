@@ -132,8 +132,10 @@ class _GameScreenState extends State<GameScreen> {
     final gameState = _gameState;
 
     return Scaffold(
+      backgroundColor: const Color(0xFFFFF7DA),
       appBar: AppBar(
-        title: Text(widget.isMultiplayer ? 'Multiplayer Match' : 'Time Trial'),
+        title: Text(
+            widget.isMultiplayer ? 'Animal Match Party' : 'Animal Time Trial'),
         actions: [
           if (!widget.isMultiplayer)
             Padding(
@@ -142,7 +144,10 @@ class _GameScreenState extends State<GameScreen> {
                 child: Text(
                   _formatTime(gameState?.elapsedSeconds ?? 0),
                   style: const TextStyle(
-                      fontSize: 24, fontWeight: FontWeight.bold),
+                    color: Color(0xFFFF7A59),
+                    fontSize: 24,
+                    fontWeight: FontWeight.w900,
+                  ),
                 ),
               ),
             ),
@@ -155,42 +160,55 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   Widget _buildGameBody(BuildContext context, GameState gameState) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final useSideScoreboard = constraints.maxWidth >= 760;
-          final scoreboard = _Scoreboard(
-            gameState: gameState,
-            isMultiplayer: widget.isMultiplayer,
-          );
-          final board = _FittedGameBoard(
-            gameState: gameState,
-            gridSize: widget.gridSize,
-          );
+    return DecoratedBox(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFFFFF7DA),
+            Color(0xFFE0F8FF),
+            Color(0xFFFFE2EA),
+          ],
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(18.0),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final useSideScoreboard = constraints.maxWidth >= 760;
+            final scoreboard = _Scoreboard(
+              gameState: gameState,
+              isMultiplayer: widget.isMultiplayer,
+            );
+            final board = _FittedGameBoard(
+              gameState: gameState,
+              gridSize: widget.gridSize,
+            );
 
-          if (useSideScoreboard) {
-            final scoreboardWidth =
-                (constraints.maxWidth * 0.28).clamp(220.0, 320.0);
+            if (useSideScoreboard) {
+              final scoreboardWidth =
+                  (constraints.maxWidth * 0.3).clamp(240.0, 340.0);
 
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(child: board),
+                  const SizedBox(width: 18),
+                  SizedBox(width: scoreboardWidth, child: scoreboard),
+                ],
+              );
+            }
+
+            return Column(
               children: [
+                SizedBox(height: 146, child: scoreboard),
+                const SizedBox(height: 14),
                 Expanded(child: board),
-                const SizedBox(width: 16),
-                SizedBox(width: scoreboardWidth, child: scoreboard),
               ],
             );
-          }
-
-          return Column(
-            children: [
-              SizedBox(height: 132, child: scoreboard),
-              const SizedBox(height: 12),
-              Expanded(child: board),
-            ],
-          );
-        },
+          },
+        ),
       ),
     );
   }
@@ -213,24 +231,41 @@ class _FittedGameBoard extends StatelessWidget {
         final spacing = boardSize < 360 ? 6.0 : 8.0;
 
         return Center(
-          child: SizedBox.square(
-            dimension: boardSize,
-            child: GridView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              padding: EdgeInsets.zero,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: gridSize,
-                crossAxisSpacing: spacing,
-                mainAxisSpacing: spacing,
-                childAspectRatio: 1.0,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.72),
+              borderRadius: BorderRadius.circular(28),
+              border: Border.all(color: Colors.white, width: 5),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF22304A).withValues(alpha: 0.16),
+                  blurRadius: 24,
+                  offset: const Offset(0, 14),
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: SizedBox.square(
+                dimension: boardSize - 24,
+                child: GridView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  padding: EdgeInsets.zero,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: gridSize,
+                    crossAxisSpacing: spacing,
+                    mainAxisSpacing: spacing,
+                    childAspectRatio: 1.0,
+                  ),
+                  itemCount: gameState.cards.length,
+                  itemBuilder: (context, index) {
+                    return MemoryCard(
+                      card: gameState.cards[index],
+                      onTap: () => gameState.flipCard(index),
+                    );
+                  },
+                ),
               ),
-              itemCount: gameState.cards.length,
-              itemBuilder: (context, index) {
-                return MemoryCard(
-                  card: gameState.cards[index],
-                  onTap: () => gameState.flipCard(index),
-                );
-              },
             ),
           ),
         );
@@ -250,16 +285,21 @@ class _Scoreboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: colorScheme.outlineVariant),
+        color: Colors.white.withValues(alpha: 0.92),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: Colors.white, width: 4),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF22304A).withValues(alpha: 0.14),
+            blurRadius: 24,
+            offset: const Offset(0, 14),
+          ),
+        ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.all(14.0),
         child: isMultiplayer
             ? _MultiplayerScores(gameState: gameState)
             : _SinglePlayerScores(gameState: gameState),
@@ -351,18 +391,16 @@ class _PlayerScorePanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
     return AnimatedContainer(
       duration: const Duration(milliseconds: 250),
       margin: EdgeInsets.symmetric(horizontal: compact ? 4 : 0),
       padding: EdgeInsets.all(compact ? 8 : 10),
       decoration: BoxDecoration(
-        color: isCurrent ? colorScheme.primaryContainer : colorScheme.surface,
-        borderRadius: BorderRadius.circular(8),
+        color: isCurrent ? const Color(0xFFFFF1A8) : Colors.white,
+        borderRadius: BorderRadius.circular(18),
         border: Border.all(
-          color: isCurrent ? colorScheme.primary : colorScheme.outlineVariant,
-          width: isCurrent ? 2 : 1,
+          color: isCurrent ? const Color(0xFFFFB84D) : const Color(0xFFBDD6FF),
+          width: isCurrent ? 3 : 2,
         ),
       ),
       child: Column(
@@ -398,13 +436,19 @@ class _ScoreHeader extends StatelessWidget {
             title,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+            style: textTheme.titleMedium?.copyWith(
+              color: const Color(0xFF22304A),
+              fontWeight: FontWeight.w900,
+            ),
           ),
         ),
         const SizedBox(width: 8),
         Text(
           score,
-          style: textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
+          style: textTheme.headlineSmall?.copyWith(
+            color: const Color(0xFFFF7A59),
+            fontWeight: FontWeight.w900,
+          ),
         ),
       ],
     );
@@ -454,11 +498,11 @@ class _MatchedCardTile extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: card.color.withValues(alpha: 0.9),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.white70),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.white, width: 2),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(10),
         child: card.assetPath != null
             ? Image.asset(
                 card.assetPath!,

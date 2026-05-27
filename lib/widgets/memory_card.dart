@@ -49,12 +49,12 @@ class MemoryCard extends StatelessWidget {
             duration: const Duration(milliseconds: 400),
             curve: Curves.easeInOut,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(18),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.2),
-                  blurRadius: 4,
-                  offset: const Offset(2, 2),
+                  color: const Color(0xFF22304A).withValues(alpha: 0.18),
+                  blurRadius: 10,
+                  offset: const Offset(0, 6),
                 )
               ],
             ),
@@ -77,10 +77,10 @@ class MemoryCard extends StatelessWidget {
                           child: Container(
                             decoration: BoxDecoration(
                                 color: card.color.withValues(alpha: 0.9),
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(18),
                                 border: Border.all(
-                                  color: Colors.white54,
-                                  width: 1,
+                                  color: Colors.white,
+                                  width: 3,
                                 )),
                             child: LayoutBuilder(
                               builder: (context, constraints) {
@@ -92,7 +92,7 @@ class MemoryCard extends StatelessWidget {
                                   child: card.assetPath != null
                                       ? ClipRRect(
                                           borderRadius:
-                                              BorderRadius.circular(12),
+                                              BorderRadius.circular(15),
                                           child: Image.asset(
                                             card.assetPath!,
                                             width: double.infinity,
@@ -134,16 +134,15 @@ class MemoryCard extends StatelessWidget {
                         )
                       : Container(
                           decoration: BoxDecoration(
-                            gradient: LinearGradient(
+                            gradient: const LinearGradient(
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                                 colors: [
-                                  Colors.blueGrey.shade600,
-                                  Colors.blueGrey.shade800,
+                                  Color(0xFF3F8CFF),
+                                  Color(0xFF6BCEFF),
                                 ]),
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                                color: Colors.blueGrey.shade400, width: 2),
+                            borderRadius: BorderRadius.circular(18),
+                            border: Border.all(color: Colors.white, width: 3),
                           ),
                           child: LayoutBuilder(
                             builder: (context, constraints) {
@@ -154,7 +153,7 @@ class MemoryCard extends StatelessWidget {
                               return Center(
                                 child: Icon(
                                   Icons.star_rounded,
-                                  color: Colors.white38,
+                                  color: Colors.white.withValues(alpha: 0.84),
                                   size: iconSize,
                                 ),
                               );
