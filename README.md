@@ -140,38 +140,64 @@ flutter build macos --release
 The built app will be here:
 
 ```text
-build/macos/Build/Products/Release/memory_game.app
+build/macos/Build/Products/Release/kids-memory-trainer.app
 ```
 
 You can open it directly from Finder, or run:
 
 ```bash
-open build/macos/Build/Products/Release/memory_game.app
+open build/macos/Build/Products/Release/kids-memory-trainer.app
 ```
 
 To make a zip file that is easier to share:
 
 ```bash
-ditto -c -k --sequesterRsrc --keepParent build/macos/Build/Products/Release/memory_game.app memory_game-macos.zip
+ditto -c -k --sequesterRsrc --keepParent build/macos/Build/Products/Release/kids-memory-trainer.app kids-memory-trainer-macos.zip
 ```
 
 The zip file will be created at:
 
 ```text
-memory_game-macos.zip
+kids-memory-trainer-macos.zip
 ```
 
 ### Sharing Outside Your Mac
 
 For personal use, the release `.app` is usually enough.
 
-For sharing with other people, macOS may warn that the app is from an unidentified developer unless it is signed and notarized with an Apple Developer account. For wider distribution, update the bundle identifier in:
+For sharing with other people, macOS requires a Developer ID signature and Apple notarization. Ad-hoc signing is not enough for public distribution and can make macOS recommend moving the app to the Trash.
+
+The app metadata lives in:
 
 ```text
 macos/Runner/Configs/AppInfo.xcconfig
 ```
 
-Then build, sign, and notarize the app using Apple tooling.
+The bundle identifier is:
+
+```text
+com.parisnakitakejser.kidsmemorytrainer
+```
+
+The GitHub release workflow can sign, notarize, staple, and validate the macOS app when these repository secrets are configured:
+
+```text
+MACOS_CERTIFICATE_BASE64
+MACOS_CERTIFICATE_PASSWORD
+MACOS_KEYCHAIN_PASSWORD
+MACOS_CODESIGN_IDENTITY
+APPLE_ID
+APPLE_APP_SPECIFIC_PASSWORD
+APPLE_TEAM_ID
+```
+
+`MACOS_CERTIFICATE_BASE64` must be a base64-encoded `.p12` export of an Apple Developer ID Application certificate. `MACOS_CODESIGN_IDENTITY` should look like:
+
+```text
+Developer ID Application: Your Name (TEAMID)
+```
+
+`APPLE_APP_SPECIFIC_PASSWORD` is an app-specific password for the Apple ID used with notarization.
 
 ## GitHub Release Builds
 
@@ -204,13 +230,17 @@ GitHub Actions will then:
 - run `flutter analyze`
 - run `flutter test`
 - build the macOS release app
-- package `memory_game.app` into a zip file
+- sign the app with Developer ID when signing secrets are configured
+- submit the app to Apple notarization
+- staple the notarization ticket
+- validate the app with Gatekeeper
+- package `kids-memory-trainer.app` into a zip file
 - upload the zip to the GitHub Release
 
 The release download will be named like:
 
 ```text
-memory_game-macos-v1.0.0.zip
+kids-memory-trainer-macos-v1.0.0.zip
 ```
 
 The workflow file is:
