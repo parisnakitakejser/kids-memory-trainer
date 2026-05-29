@@ -13,7 +13,9 @@ class ThemeAssetService {
   };
 
   static Future<List<String>> loadAssetsForTheme(GameTheme theme) async {
-    final directory = 'assets/${theme.assetFolder}/';
+    final directory = theme == GameTheme.animals
+        ? 'build_assets/animals/'
+        : 'assets/${theme.assetFolder}/';
     final manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
     final assets = manifest
         .listAssets()

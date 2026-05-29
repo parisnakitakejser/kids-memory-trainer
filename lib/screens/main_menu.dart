@@ -319,10 +319,11 @@ class _HeroPanel extends StatelessWidget {
           runSpacing: 14,
           children: [
             _AnimalBadge(
-                label: strings.panda, assetPath: 'assets/animals/1.png'),
+                label: strings.bee, assetPath: 'build_assets/animals/1.jpg'),
             _AnimalBadge(
-                label: strings.tiger, assetPath: 'assets/animals/2.png'),
-            _AnimalBadge(label: strings.fox, assetPath: 'assets/animals/3.png'),
+                label: strings.fox, assetPath: 'build_assets/animals/2.jpg'),
+            _AnimalBadge(
+                label: strings.koala, assetPath: 'build_assets/animals/3.jpg'),
           ],
         ),
         const SizedBox(height: 26),

@@ -79,6 +79,30 @@ Recommended image size:
 
 Square images work best. Transparent PNGs are a good choice because the card color can still show around the image. Larger images such as `1024 x 1024 px` are also fine, but they will be scaled down inside the card.
 
+The original animal images live in:
+
+```text
+assets/animals/
+```
+
+Release builds use optimized generated copies from:
+
+```text
+build_assets/animals/
+```
+
+Before building a release, regenerate the optimized copies:
+
+```bash
+./tool/optimize_assets.sh
+```
+
+By default this creates `512 x 512 px` JPEG card images. You can change the max size if needed:
+
+```bash
+MAX_IMAGE_SIZE=768 ./tool/optimize_assets.sh
+```
+
 ### Fallback Behavior
 
 Each board needs one unique face per pair.
@@ -96,11 +120,12 @@ If a theme folder has enough images, the game uses those images. If it does not 
 - Letters use letters.
 - Colors use generated card colors.
 
-So if `assets/animals/` has 12 images and the player starts a `6x6` game, the first 12 pairs use images and the remaining 6 pairs use animal emoji.
+So if `build_assets/animals/` has 12 images and the player starts a `6x6` game, the first 12 pairs use images and the remaining 6 pairs use animal emoji.
 
 After adding new assets, run:
 
 ```bash
+./tool/optimize_assets.sh
 flutter pub get
 ```
 

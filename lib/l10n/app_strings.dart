@@ -219,9 +219,9 @@ class AppStrings {
         da: 'Når brætstørrelsen ændres, starter et nyt spil.',
       );
 
-  String get panda => _pick(en: 'Panda', da: 'Panda');
+  String get bee => _pick(en: 'Bee', da: 'Bi');
 
-  String get tiger => _pick(en: 'Tiger', da: 'Tiger');
+  String get koala => _pick(en: 'Koala', da: 'Koala');
 
   String get fox => _pick(en: 'Fox', da: 'Ræv');
 }
