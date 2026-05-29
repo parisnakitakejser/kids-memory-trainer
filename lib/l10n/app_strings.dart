@@ -186,6 +186,10 @@ class AppStrings {
 
   String get matches => _pick(en: 'Matches', da: 'Stik');
 
+  String get tries => _pick(en: 'Tries', da: 'Forsøg');
+
+  String get ratio => _pick(en: 'Ratio', da: 'Ratio');
+
   String get matchFound => _pick(en: 'Match!', da: 'Stik!');
 
   String get score => _pick(en: 'Score', da: 'Point');

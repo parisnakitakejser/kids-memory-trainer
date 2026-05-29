@@ -42,9 +42,13 @@ class CardModel {
 class Player {
   final String name;
   int score;
+  int tries;
   final List<CardModel> matchedCards;
 
-  Player({required this.name, this.score = 0}) : matchedCards = [];
+  Player({required this.name, this.score = 0, this.tries = 0})
+      : matchedCards = [];
+
+  double get successRatio => tries == 0 ? 0 : score / tries;
 }
 
 class GameState extends ChangeNotifier {
@@ -57,6 +61,7 @@ class GameState extends ChangeNotifier {
 
   List<CardModel> cards = [];
   int currentPlayerIndex = 0;
+  int tries = 0;
 
   // Single player timer
   int elapsedSeconds = 0;
@@ -86,6 +91,8 @@ class GameState extends ChangeNotifier {
   Player get currentPlayer => players[currentPlayerIndex];
 
   int get matchedPairs => cards.where((c) => c.isMatched).length ~/ 2;
+
+  double get successRatio => tries == 0 ? 0 : matchedPairs / tries;
 
   List<CardModel> get matchedPairPreviews {
     final seen = <String>{};
@@ -439,6 +446,10 @@ class GameState extends ChangeNotifier {
 
   void _checkMatch() async {
     isProcessing = true;
+    tries++;
+    if (isMultiplayer) {
+      currentPlayer.tries++;
+    }
     notifyListeners();
 
     final bool isMatch = firstCard!.matchKey == secondCard!.matchKey;

@@ -503,6 +503,15 @@ class _SinglePlayerScores extends StatelessWidget {
           title: strings.matches,
           score: '${gameState.matchedPairs}',
         ),
+        const SizedBox(height: 8),
+        _ScoreStatsRow(
+          stats: [
+            _ScoreStat(label: strings.tries, value: '${gameState.tries}'),
+            _ScoreStat(
+                label: strings.ratio,
+                value: _formatRatio(gameState.successRatio)),
+          ],
+        ),
         const SizedBox(height: 12),
         Expanded(
           child: _MatchedCardWrap(cards: matchedCards),
@@ -586,6 +595,19 @@ class _PlayerScorePanel extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _ScoreHeader(title: player.name, score: '${player.score}'),
+          SizedBox(height: compact ? 6 : 8),
+          _ScoreStatsRow(
+            compact: compact,
+            stats: [
+              _ScoreStat(
+                  label: AppStrings.of(context).tries,
+                  value: '${player.tries}'),
+              _ScoreStat(
+                label: AppStrings.of(context).ratio,
+                value: _formatRatio(player.successRatio),
+              ),
+            ],
+          ),
           if (!compact) const SizedBox(height: 10),
           if (!compact)
             Expanded(child: _MatchedCardWrap(cards: player.matchedCards)),
@@ -594,6 +616,57 @@ class _PlayerScorePanel extends StatelessWidget {
     );
   }
 }
+
+class _ScoreStat {
+  final String label;
+  final String value;
+
+  const _ScoreStat({required this.label, required this.value});
+}
+
+class _ScoreStatsRow extends StatelessWidget {
+  final List<_ScoreStat> stats;
+  final bool compact;
+
+  const _ScoreStatsRow({
+    required this.stats,
+    this.compact = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
+    return Wrap(
+      spacing: compact ? 6 : 8,
+      runSpacing: 6,
+      children: stats.map((stat) {
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            color: const Color(0xFFA7E8FF).withValues(alpha: 0.36),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: const Color(0xFFBDD6FF)),
+          ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: compact ? 7 : 9,
+              vertical: compact ? 4 : 5,
+            ),
+            child: Text(
+              '${stat.label}: ${stat.value}',
+              style: textTheme.labelMedium?.copyWith(
+                color: const Color(0xFF22304A),
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+          ),
+        );
+      }).toList(),
+    );
+  }
+}
+
+String _formatRatio(double ratio) => ratio.toStringAsFixed(1);
 
 class _ScoreHeader extends StatelessWidget {
   final String title;
