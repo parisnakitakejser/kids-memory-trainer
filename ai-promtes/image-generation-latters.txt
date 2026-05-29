@@ -1,0 +1,452 @@
+Create a 1024x1024 kawaii-style alphabet learning card illustration for a children's educational memory game.
+
+Card Information:
+Letter: {LETTER}
+Animal: {ANIMAL}
+Colors: {COLORS}
+Pose: {POSE}
+Size: {SIZE}
+Expression: {EXPRESSION}
+
+Composition:
+- One large glossy 3D alphabet letter "{LETTER}"
+- One adorable {ANIMAL} interacting with the letter
+- The animal may sit on, lean against, hug, hold, climb, play with, or stand beside the letter
+- Letter and animal should be the clear main focus
+- Centered composition
+- Educational alphabet-learning design
+- Easy to recognize for toddlers and young children
+- Letter must be clearly visible and readable
+- Animal species must be immediately recognizable
+
+Animal Style:
+- Ultra cute chibi/kawaii art style
+- Big glossy sparkling eyes
+- Small rounded proportions
+- Soft fluffy textures
+- Rosy cheeks
+- Happy wholesome expression
+- Thick clean outline
+- High-detail cartoon rendering
+- Child-friendly design
+- Premium mobile game asset quality
+- Soft fantasy lighting
+- Sticker-like readability
+- Cute toy-like appearance
+
+Letter Style:
+- Large glossy 3D alphabet letter
+- Rounded toy-like appearance
+- Soft highlights and reflections
+- Smooth polished surface
+- Matching the color theme
+- Slight magical glow
+- Premium educational game quality
+- Letter should feel playful and friendly
+
+Background:
+- Soft colorful kids-game background
+- Smooth pastel gradients
+- Rounded soft clouds, bushes, hills, flowers, or abstract shapes
+- Warm playful atmosphere
+- Cozy magical environment
+- Dreamy colorful lighting
+- Cute mobile puzzle game feeling
+- Subtle sparkles and floating particles
+- Tiny stars, hearts, bubbles, and magical effects
+- Background colors matching the animal theme
+- Background should support the character without stealing focus
+- Safe, happy, comforting children's atmosphere
+
+Character Effects:
+- Soft glow around the animal
+- Soft glow around the letter
+- Gentle shadow beneath the character
+- Tiny sparkles around the scene
+- Magical storybook atmosphere
+- Bright cheerful mood
+
+Animal-Specific Details:
+- Add small decorative elements related to the animal
+- Natural accessories and environmental details matching the species
+- Keep all details cute, simple, and child-friendly
+
+Quality:
+- Premium children's mobile game artwork
+- Consistent art style across an entire alphabet card collection
+- Highly detailed
+- Clean edges
+- Professional educational game asset
+- Vibrant but soft colors
+- High readability at small sizes
+- No border
+- No frame
+- No watermark
+- No additional text
+- Only the single letter "{LETTER}" may appear
+
+-------- Latter list to generate --------
+
+Letter: A
+Animal: Adult Alligator
+Colors: Mint green + yellow
+Pose: Proud, standing tall
+Size: Slightly larger
+Expression: Friendly and confident
+
+Letter: a
+Animal: Baby Alligator
+Colors: Mint green + yellow
+Pose: Sitting or playing
+Size: Smaller and rounder
+Expression: Cute and innocent
+
+Letter: B
+Animal: Adult Bear
+Colors: Sky blue + cream
+Pose: Standing proudly
+Size: Slightly larger
+Expression: Calm and friendly
+
+Letter: b
+Animal: Baby Bear
+Colors: Sky blue + cream
+Pose: Hugging a honey pot
+Size: Smaller and rounder
+Expression: Cute and innocent
+
+Letter: C
+Animal: Adult Cat
+Colors: Peach orange + yellow
+Pose: Sitting elegantly
+Size: Slightly larger
+Expression: Friendly and curious
+
+Letter: c
+Animal: Kitten
+Colors: Peach orange + yellow
+Pose: Playing with yarn
+Size: Smaller and rounder
+Expression: Cute and playful
+
+Letter: D
+Animal: Adult Dog
+Colors: Baby blue + cream
+Pose: Standing proudly
+Size: Slightly larger
+Expression: Loyal and happy
+
+Letter: d
+Animal: Puppy
+Colors: Baby blue + cream
+Pose: Chasing a ball
+Size: Smaller and rounder
+Expression: Cute and excited
+
+Letter: E
+Animal: Adult Elephant
+Colors: Lavender + blue
+Pose: Standing tall
+Size: Slightly larger
+Expression: Wise and gentle
+
+Letter: e
+Animal: Baby Elephant
+Colors: Lavender + blue
+Pose: Splashing water
+Size: Smaller and rounder
+Expression: Cute and joyful
+
+Letter: F
+Animal: Adult Fox
+Colors: Coral orange + pink
+Pose: Standing confidently
+Size: Slightly larger
+Expression: Clever and friendly
+
+Letter: f
+Animal: Fox Cub
+Colors: Coral orange + pink
+Pose: Curled up playfully
+Size: Smaller and rounder
+Expression: Cute and innocent
+
+Letter: G
+Animal: Adult Giraffe
+Colors: Sunny yellow + peach
+Pose: Standing tall
+Size: Slightly larger
+Expression: Gentle and friendly
+
+Letter: g
+Animal: Baby Giraffe
+Colors: Sunny yellow + peach
+Pose: Looking up curiously
+Size: Smaller and rounder
+Expression: Cute and curious
+
+Letter: H
+Animal: Adult Hedgehog
+Colors: Mint green + cream
+Pose: Standing proudly
+Size: Slightly larger
+Expression: Friendly and calm
+
+Letter: h
+Animal: Baby Hedgehog
+Colors: Mint green + cream
+Pose: Holding a flower
+Size: Smaller and rounder
+Expression: Cute and shy
+
+Letter: I
+Animal: Adult Iguana
+Colors: Emerald green + mint
+Pose: Relaxing on a rock
+Size: Slightly larger
+Expression: Calm and confident
+
+Letter: i
+Animal: Baby Iguana
+Colors: Emerald green + mint
+Pose: Crawling playfully
+Size: Smaller and rounder
+Expression: Cute and curious
+
+Letter: J
+Animal: Adult Jellyfish
+Colors: Aqua + lavender
+Pose: Floating gracefully
+Size: Slightly larger
+Expression: Friendly and magical
+
+Letter: j
+Animal: Baby Jellyfish
+Colors: Aqua + lavender
+Pose: Bouncing happily
+Size: Smaller and rounder
+Expression: Cute and cheerful
+
+Letter: K
+Animal: Adult Koala
+Colors: Soft blue + silver
+Pose: Sitting in a tree
+Size: Slightly larger
+Expression: Relaxed and friendly
+
+Letter: k
+Animal: Baby Koala
+Colors: Soft blue + silver
+Pose: Hugging a branch
+Size: Smaller and rounder
+Expression: Cute and sleepy
+
+Letter: L
+Animal: Adult Lion
+Colors: Gold + cream
+Pose: Standing proudly
+Size: Slightly larger
+Expression: Brave and kind
+
+Letter: l
+Animal: Lion Cub
+Colors: Gold + cream
+Pose: Pouncing playfully
+Size: Smaller and rounder
+Expression: Cute and adventurous
+
+Letter: M
+Animal: Adult Monkey
+Colors: Caramel + peach
+Pose: Swinging confidently
+Size: Slightly larger
+Expression: Playful and clever
+
+Letter: m
+Animal: Baby Monkey
+Colors: Caramel + peach
+Pose: Hanging from tail
+Size: Smaller and rounder
+Expression: Cute and mischievous
+
+Letter: N
+Animal: Adult Narwhal
+Colors: Aqua + white
+Pose: Swimming gracefully
+Size: Slightly larger
+Expression: Calm and magical
+
+Letter: n
+Animal: Baby Narwhal
+Colors: Aqua + white
+Pose: Blowing bubbles
+Size: Smaller and rounder
+Expression: Cute and joyful
+
+Letter: O
+Animal: Adult Owl
+Colors: Purple + cream
+Pose: Perched proudly
+Size: Slightly larger
+Expression: Wise and friendly
+
+Letter: o
+Animal: Owlet
+Colors: Purple + cream
+Pose: Flapping tiny wings
+Size: Smaller and rounder
+Expression: Cute and curious
+
+Letter: P
+Animal: Adult Penguin
+Colors: Ice blue + mint
+Pose: Standing proudly
+Size: Slightly larger
+Expression: Friendly and calm
+
+Letter: p
+Animal: Penguin Chick
+Colors: Ice blue + mint
+Pose: Sliding on ice
+Size: Smaller and rounder
+Expression: Cute and playful
+
+Letter: Q
+Animal: Adult Quail
+Colors: Pink + tan
+Pose: Standing confidently
+Size: Slightly larger
+Expression: Gentle and friendly
+
+Letter: q
+Animal: Quail Chick
+Colors: Pink + tan
+Pose: Pecking curiously
+Size: Smaller and rounder
+Expression: Cute and innocent
+
+Letter: R
+Animal: Adult Rabbit
+Colors: Soft pink + white
+Pose: Sitting upright
+Size: Slightly larger
+Expression: Friendly and alert
+
+Letter: r
+Animal: Bunny
+Colors: Soft pink + white
+Pose: Holding a carrot
+Size: Smaller and rounder
+Expression: Cute and cheerful
+
+Letter: S
+Animal: Adult Sheep
+Colors: Baby blue + white
+Pose: Standing proudly
+Size: Slightly larger
+Expression: Gentle and calm
+
+Letter: s
+Animal: Lamb
+Colors: Baby blue + white
+Pose: Jumping playfully
+Size: Smaller and rounder
+Expression: Cute and happy
+
+Letter: T
+Animal: Adult Tiger
+Colors: Orange + yellow
+Pose: Standing confidently
+Size: Slightly larger
+Expression: Brave and friendly
+
+Letter: t
+Animal: Tiger Cub
+Colors: Orange + yellow
+Pose: Playing with tail
+Size: Smaller and rounder
+Expression: Cute and energetic
+
+Letter: U
+Animal: Adult Unicorn
+Colors: Rainbow pastel + white
+Pose: Standing majestically
+Size: Slightly larger
+Expression: Magical and kind
+
+Letter: u
+Animal: Baby Unicorn
+Colors: Rainbow pastel + white
+Pose: Playing among stars
+Size: Smaller and rounder
+Expression: Cute and dreamy
+
+Letter: V
+Animal: Adult Vicuña
+Colors: Peach + cream
+Pose: Standing proudly
+Size: Slightly larger
+Expression: Gentle and friendly
+
+Letter: v
+Animal: Baby Vicuña
+Colors: Peach + cream
+Pose: Sitting peacefully
+Size: Smaller and rounder
+Expression: Cute and shy
+
+Letter: W
+Animal: Adult Whale
+Colors: Ocean blue + aqua
+Pose: Swimming gracefully
+Size: Slightly larger
+Expression: Calm and friendly
+
+Letter: w
+Animal: Whale Calf
+Colors: Ocean blue + aqua
+Pose: Splashing water
+Size: Smaller and rounder
+Expression: Cute and joyful
+
+Letter: X
+Animal: Adult X-Ray Fish
+Colors: Cyan + purple
+Pose: Swimming confidently
+Size: Slightly larger
+Expression: Friendly and curious
+
+Letter: x
+Animal: Baby X-Ray Fish
+Colors: Cyan + purple
+Pose: Blowing bubbles
+Size: Smaller and rounder
+Expression: Cute and playful
+
+Letter: Y
+Animal: Adult Yak
+Colors: Honey yellow + cream
+Pose: Standing proudly
+Size: Slightly larger
+Expression: Strong and friendly
+
+Letter: y
+Animal: Baby Yak
+Colors: Honey yellow + cream
+Pose: Sitting in flowers
+Size: Smaller and rounder
+Expression: Cute and innocent
+
+Letter: Z
+Animal: Adult Zebra
+Colors: Soft red + cream
+Pose: Standing proudly
+Size: Slightly larger
+Expression: Friendly and confident
+
+Letter: z
+Animal: Zebra Foal
+Colors: Soft red + cream
+Pose: Running playfully
+Size: Smaller and rounder
+Expression: Cute and innocent

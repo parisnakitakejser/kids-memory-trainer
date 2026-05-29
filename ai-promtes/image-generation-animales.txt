@@ -47,3 +47,116 @@ Character effects:
 Optional:
 - The animal may hold a cute object related to itself
 - Add tiny decorative environment details matching the animal
+
+--------- Animal List ---------
+
+Animal: Chicken
+Main color theme: Cream and red
+
+Animal: Turkey
+Main color theme: Brown and copper
+
+Animal: Pigeon
+Main color theme: Gray and purple
+
+Animal: Sparrow
+Main color theme: Brown and cream
+
+Animal: Eagle
+Main color theme: Dark brown and gold
+
+Animal: Hawk
+Main color theme: Gray and amber
+
+Animal: Falcon
+Main color theme: Silver and navy
+
+Animal: Unicorn
+Main color theme: Rainbow pastel and white
+
+Animal: Dragon
+Main color theme: Emerald and gold
+
+Animal: Phoenix
+Main color theme: Fire orange and red
+
+Animal: Yeti
+Main color theme: White and ice blue
+
+Animal: Alpaca
+Main color theme: Cream and rainbow
+
+Animal: Llama
+Main color theme: Brown and cyan
+
+Animal: Camel
+Main color theme: Sand and orange
+
+Animal: Kangaroo
+Main color theme: Brown and peach
+
+Animal: Platypus
+Main color theme: Brown and aqua
+
+Animal: Kiwi bird
+Main color theme: Brown and lime
+
+Animal: Red panda
+Main color theme: Orange and dark brown
+
+Animal: Meerkat
+Main color theme: Sandy brown and yellow
+
+Animal: Armadillo
+Main color theme: Gray and bronze
+
+Animal: Mole
+Main color theme: Dark gray and pink
+
+Animal: Lemur
+Main color theme: Black, white, and yellow
+
+Animal: Capybara
+Main color theme: Light brown and mint
+
+Animal: Ant
+Main color theme: Red and black
+
+Animal: Ladybug
+Main color theme: Red and black
+
+Animal: Butterfly
+Main color theme: Rainbow pastel
+
+Animal: Moth
+Main color theme: Beige and moonlight blue
+
+Animal: Snail
+Main color theme: Mint and peach
+
+Animal: Worm
+Main color theme: Pink and purple
+
+Animal: Firefly
+Main color theme: Yellow and dark green
+
+Animal: Scorpion
+Main color theme: Sand and dark red
+
+Animal: Spider
+Main color theme: Black and neon green
+
+Animal: Bison
+Main color theme: Dark brown and orange
+
+Animal: Buffalo
+Main color theme: Brown and dusty blue
+
+Animal: Moose
+Main color theme: Chocolate and forest green
+
+Animal: Donkey
+Main color theme: Gray and blue
+
+Animal: Cheetah
+Main color theme: Golden yellow and black
