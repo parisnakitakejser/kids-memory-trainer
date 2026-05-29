@@ -64,6 +64,8 @@ class AppStrings {
 
   String get animals => _pick(en: 'Animals', da: 'Dyr');
 
+  String get letters => _pick(en: 'Letters', da: 'Bogstaver');
+
   String get boardSize => _pick(
         en: 'Board Size',
         da: 'Brætstørrelse',

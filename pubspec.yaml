@@ -25,5 +25,6 @@ flutter:
     - build_assets/animals/
     - assets/sounds/
     - assets/numbers/
-    - assets/letters/
+    - assets/letters/en/
+    - assets/letters/da/
     - assets/colors/

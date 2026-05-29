@@ -51,7 +51,8 @@ Asset folders:
 ```text
 assets/animals/
 assets/numbers/
-assets/letters/
+assets/letters/en/
+assets/letters/da/
 assets/colors/
 ```
 
@@ -62,8 +63,11 @@ assets/animals/1.png
 assets/animals/2.png
 assets/animals/3.png
 assets/numbers/1.png
-assets/letters/a.png
+assets/letters/en/a.png
+assets/letters/da/ae.png
 ```
+
+Letter assets are split by language so the game can load the right alphabet for the selected language. English letter images go in `assets/letters/en/`, and Danish letter images go in `assets/letters/da/`.
 
 Supported image formats:
 

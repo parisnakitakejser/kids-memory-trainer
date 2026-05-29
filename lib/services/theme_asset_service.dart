@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 
+import '../app_settings.dart';
 import '../models/game_state.dart';
 
 class ThemeAssetService {
@@ -12,10 +13,11 @@ class ThemeAssetService {
     '.webp',
   };
 
-  static Future<List<String>> loadAssetsForTheme(GameTheme theme) async {
-    final directory = theme == GameTheme.animals
-        ? 'build_assets/animals/'
-        : 'assets/${theme.assetFolder}/';
+  static Future<List<String>> loadAssetsForTheme(
+    GameTheme theme, {
+    AppLanguage language = AppLanguage.english,
+  }) async {
+    final directory = _directoryForTheme(theme, language);
     final manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
     final assets = manifest
         .listAssets()
@@ -25,6 +27,18 @@ class ThemeAssetService {
 
     assets.sort(_naturalSort);
     return assets;
+  }
+
+  static String _directoryForTheme(GameTheme theme, AppLanguage language) {
+    if (theme == GameTheme.animals) {
+      return 'build_assets/animals/';
+    }
+
+    if (theme == GameTheme.letters) {
+      return 'assets/letters/${language.code}/';
+    }
+
+    return 'assets/${theme.assetFolder}/';
   }
 
   static bool _isSupportedImage(String asset) {

@@ -44,8 +44,11 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   Future<void> _loadGame() async {
-    final themeAssets =
-        await ThemeAssetService.loadAssetsForTheme(widget.theme);
+    final language = AppSettingsScope.read(context).language;
+    final themeAssets = await ThemeAssetService.loadAssetsForTheme(
+      widget.theme,
+      language: language,
+    );
     if (!mounted) return;
 
     final gameState = GameState(
@@ -54,6 +57,9 @@ class _GameScreenState extends State<GameScreen> {
       theme: widget.theme,
       gridSize: _activeGridSize,
       themeAssets: themeAssets,
+      fallbackLetters: language == AppLanguage.danish
+          ? GameState.danishLetters
+          : GameState.englishLetters,
     );
     gameState.addListener(_onGameStateChanged);
 
@@ -167,7 +173,8 @@ class _GameScreenState extends State<GameScreen> {
 
   Future<void> _showSettings() async {
     final settings = AppSettingsScope.of(context);
-    var selectedLanguage = settings.language;
+    final originalLanguage = settings.language;
+    var selectedLanguage = originalLanguage;
     var selectedGridSize = _activeGridSize;
 
     await showDialog<void>(
@@ -244,7 +251,9 @@ class _GameScreenState extends State<GameScreen> {
                   onPressed: () async {
                     await settings.setLanguage(selectedLanguage);
 
-                    final shouldRestart = selectedGridSize != _activeGridSize;
+                    final shouldRestart = selectedGridSize != _activeGridSize ||
+                        (widget.theme == GameTheme.letters &&
+                            selectedLanguage != originalLanguage);
                     if (shouldRestart) {
                       _activeGridSize = selectedGridSize;
                     }

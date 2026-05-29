@@ -26,6 +26,7 @@ class _MainMenuState extends State<MainMenu> {
   final TextEditingController _player2Controller = TextEditingController();
   final UpdateService _updateService = UpdateService();
   PlayerMode _selectedPlayerMode = PlayerMode.single;
+  GameTheme _selectedTheme = GameTheme.animals;
   int _selectedGridSize = 6;
   bool _checkedForUpdate = false;
 
@@ -214,7 +215,7 @@ class _MainMenuState extends State<MainMenu> {
           playerNames: _isMultiplayer
               ? [_player1Controller.text.trim(), _player2Controller.text.trim()]
               : const ['Player 1'],
-          theme: GameTheme.animals,
+          theme: _selectedTheme,
           gridSize: _selectedGridSize,
         ),
       ),
@@ -229,6 +230,7 @@ class _MainMenuState extends State<MainMenu> {
     final setupPanel = _SetupPanel(
       strings: strings,
       selectedPlayerMode: _selectedPlayerMode,
+      selectedTheme: _selectedTheme,
       selectedGridSize: _selectedGridSize,
       isMultiplayer: _isMultiplayer,
       player1Controller: _player1Controller,
@@ -236,6 +238,11 @@ class _MainMenuState extends State<MainMenu> {
       onPlayerModeChanged: (mode) {
         setState(() {
           _selectedPlayerMode = mode;
+        });
+      },
+      onThemeChanged: (theme) {
+        setState(() {
+          _selectedTheme = theme;
         });
       },
       onGridSizeChanged: (size) {
@@ -361,11 +368,13 @@ class _HeroPanel extends StatelessWidget {
 class _SetupPanel extends StatelessWidget {
   final AppStrings strings;
   final PlayerMode selectedPlayerMode;
+  final GameTheme selectedTheme;
   final int selectedGridSize;
   final bool isMultiplayer;
   final TextEditingController player1Controller;
   final TextEditingController player2Controller;
   final ValueChanged<PlayerMode> onPlayerModeChanged;
+  final ValueChanged<GameTheme> onThemeChanged;
   final ValueChanged<int> onGridSizeChanged;
   final VoidCallback onStartGame;
   final VoidCallback onSettings;
@@ -374,11 +383,13 @@ class _SetupPanel extends StatelessWidget {
   const _SetupPanel({
     required this.strings,
     required this.selectedPlayerMode,
+    required this.selectedTheme,
     required this.selectedGridSize,
     required this.isMultiplayer,
     required this.player1Controller,
     required this.player2Controller,
     required this.onPlayerModeChanged,
+    required this.onThemeChanged,
     required this.onGridSizeChanged,
     required this.onStartGame,
     required this.onSettings,
@@ -433,7 +444,28 @@ class _SetupPanel extends StatelessWidget {
             const SizedBox(height: 24),
             _SectionLabel(icon: Icons.style, label: strings.cardMode),
             const SizedBox(height: 12),
-            _AnimalModeTile(label: strings.animals),
+            SizedBox(
+              width: double.infinity,
+              child: SegmentedButton<GameTheme>(
+                showSelectedIcon: false,
+                segments: [
+                  ButtonSegment(
+                    value: GameTheme.animals,
+                    icon: const Icon(Icons.pets),
+                    label: Text(strings.animals),
+                  ),
+                  ButtonSegment(
+                    value: GameTheme.letters,
+                    icon: const Icon(Icons.abc),
+                    label: Text(strings.letters),
+                  ),
+                ],
+                selected: {selectedTheme},
+                onSelectionChanged: (newSelection) {
+                  onThemeChanged(newSelection.first);
+                },
+              ),
+            ),
             const SizedBox(height: 24),
             _SectionLabel(icon: Icons.grid_view, label: strings.boardSize),
             const SizedBox(height: 12),
@@ -570,43 +602,6 @@ class _AnimalBadge extends StatelessWidget {
                 ),
               ),
             ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _AnimalModeTile extends StatelessWidget {
-  final String label;
-
-  const _AnimalModeTile({required this.label});
-
-  @override
-  Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: const Color(0xFFFFF1A8),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFFFFD35B), width: 2),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        child: Row(
-          children: [
-            const Icon(Icons.pets, color: Color(0xFFFF7A59), size: 30),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                label,
-                style: const TextStyle(
-                  color: Color(0xFF22304A),
-                  fontSize: 18,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-            ),
-            const Icon(Icons.check_circle, color: Color(0xFF24B47E)),
           ],
         ),
       ),

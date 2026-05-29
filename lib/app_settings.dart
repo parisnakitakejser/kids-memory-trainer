@@ -67,4 +67,12 @@ class AppSettingsScope extends InheritedNotifier<AppSettingsController> {
     assert(scope != null, 'No AppSettingsScope found in context');
     return scope!.notifier!;
   }
+
+  static AppSettingsController read(BuildContext context) {
+    final element =
+        context.getElementForInheritedWidgetOfExactType<AppSettingsScope>();
+    final scope = element?.widget as AppSettingsScope?;
+    assert(scope != null, 'No AppSettingsScope found in context');
+    return scope!.notifier!;
+  }
 }

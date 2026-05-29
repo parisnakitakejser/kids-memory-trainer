@@ -53,6 +53,7 @@ class GameState extends ChangeNotifier {
   final GameTheme theme;
   final int gridSize;
   final List<String> themeAssets;
+  final List<String> fallbackLetters;
 
   List<CardModel> cards = [];
   int currentPlayerIndex = 0;
@@ -74,6 +75,7 @@ class GameState extends ChangeNotifier {
     required this.theme,
     required this.gridSize,
     this.themeAssets = const [],
+    this.fallbackLetters = englishLetters,
   }) : players = playerNames.map((name) => Player(name: name)).toList() {
     _initializeBoard();
     if (!isMultiplayer) {
@@ -173,7 +175,7 @@ class GameState extends ChangeNotifier {
     '🐑'
   ];
 
-  static const List<String> _letters = [
+  static const List<String> englishLetters = [
     'A',
     'B',
     'C',
@@ -226,26 +228,122 @@ class GameState extends ChangeNotifier {
     'x',
     'y',
     'z',
-    'Α',
-    'Β',
-    'Γ',
-    'Δ',
-    'Ε',
-    'Ζ',
-    'Η',
-    'Θ',
-    'Ι',
-    'Κ',
-    'Λ',
-    'Μ',
-    'Ν',
-    'Ξ',
-    'Ο',
-    'Π',
-    'Ρ',
-    'Σ',
-    'Τ',
-    'Υ'
+    'Aa',
+    'Bb',
+    'Cc',
+    'Dd',
+    'Ee',
+    'Ff',
+    'Gg',
+    'Hh',
+    'Ii',
+    'Jj',
+    'Kk',
+    'Ll',
+    'Mm',
+    'Nn',
+    'Oo',
+    'Pp',
+    'Qq',
+    'Rr',
+    'Ss',
+    'Tt',
+    'Uu',
+    'Vv',
+    'Ww',
+    'Xx',
+    'Yy',
+    'Zz',
+  ];
+
+  static const List<String> danishLetters = [
+    'A',
+    'B',
+    'C',
+    'D',
+    'E',
+    'F',
+    'G',
+    'H',
+    'I',
+    'J',
+    'K',
+    'L',
+    'M',
+    'N',
+    'O',
+    'P',
+    'Q',
+    'R',
+    'S',
+    'T',
+    'U',
+    'V',
+    'W',
+    'X',
+    'Y',
+    'Z',
+    'Æ',
+    'Ø',
+    'Å',
+    'a',
+    'b',
+    'c',
+    'd',
+    'e',
+    'f',
+    'g',
+    'h',
+    'i',
+    'j',
+    'k',
+    'l',
+    'm',
+    'n',
+    'o',
+    'p',
+    'q',
+    'r',
+    's',
+    't',
+    'u',
+    'v',
+    'w',
+    'x',
+    'y',
+    'z',
+    'æ',
+    'ø',
+    'å',
+    'Aa',
+    'Bb',
+    'Cc',
+    'Dd',
+    'Ee',
+    'Ff',
+    'Gg',
+    'Hh',
+    'Ii',
+    'Jj',
+    'Kk',
+    'Ll',
+    'Mm',
+    'Nn',
+    'Oo',
+    'Pp',
+    'Qq',
+    'Rr',
+    'Ss',
+    'Tt',
+    'Uu',
+    'Vv',
+    'Ww',
+    'Xx',
+    'Yy',
+    'Zz',
+    'Ææ',
+    'Øø',
+    'Åå',
   ];
 
   void _initializeBoard() {
@@ -277,7 +375,7 @@ class GameState extends ChangeNotifier {
           if (i < themeAssets.length) {
             assetPath = themeAssets[i];
           } else {
-            content = _letters[i];
+            content = fallbackLetters[i % fallbackLetters.length];
           }
           break;
         case GameTheme.colors:
