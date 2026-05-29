@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="520" viewBox="0 0 960 520" role="img" aria-labelledby="title desc">
+  <title id="title">Open Anyway in Privacy and Security</title>
+  <desc id="desc">Illustration showing the macOS Privacy and Security screen with an Open Anyway button.</desc>
+  <rect width="960" height="520" rx="28" fill="#f6f8fb"/>
+  <rect x="84" y="64" width="792" height="392" rx="26" fill="#ffffff" stroke="#d5deea" stroke-width="4"/>
+  <rect x="84" y="64" width="250" height="392" rx="26" fill="#edf3fb"/>
+  <text x="126" y="126" font-family="Arial, sans-serif" font-size="24" font-weight="800" fill="#22304a">System Settings</text>
+  <rect x="118" y="184" width="184" height="46" rx="14" fill="#dbe8fa"/>
+  <text x="144" y="214" font-family="Arial, sans-serif" font-size="18" font-weight="800" fill="#22304a">Privacy &amp; Security</text>
+  <text x="386" y="130" font-family="Arial, sans-serif" font-size="32" font-weight="800" fill="#22304a">Privacy &amp; Security</text>
+  <rect x="386" y="190" width="426" height="118" rx="18" fill="#fff1a8" stroke="#ffd35b" stroke-width="4"/>
+  <text x="418" y="236" font-family="Arial, sans-serif" font-size="21" font-weight="800" fill="#22304a">kids-memory-trainer was blocked</text>
+  <text x="418" y="266" font-family="Arial, sans-serif" font-size="18" fill="#5c6b82">Confirm that you want to open the app.</text>
+  <rect x="590" y="338" width="222" height="52" rx="26" fill="#24b47e"/>
+  <text x="642" y="372" font-family="Arial, sans-serif" font-size="21" font-weight="800" fill="#ffffff">Open Anyway</text>
+</svg>

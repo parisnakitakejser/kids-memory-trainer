@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="520" viewBox="0 0 960 520" role="img" aria-labelledby="title desc">
+  <title id="title">Gatekeeper warning</title>
+  <desc id="desc">Illustration showing a macOS Gatekeeper warning dialog.</desc>
+  <rect width="960" height="520" rx="28" fill="#f6f8fb"/>
+  <rect x="188" y="92" width="584" height="336" rx="28" fill="#ffffff" stroke="#d5deea" stroke-width="4"/>
+  <circle cx="480" cy="164" r="42" fill="#fff1a8" stroke="#ffd35b" stroke-width="5"/>
+  <path d="M480 136v44" stroke="#22304a" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="480" cy="194" r="5" fill="#22304a"/>
+  <text x="250" y="244" font-family="Arial, sans-serif" font-size="28" font-weight="800" fill="#22304a">macOS blocked the first open</text>
+  <text x="250" y="286" font-family="Arial, sans-serif" font-size="21" fill="#5c6b82">This can happen the first time Gatekeeper checks a new app.</text>
+  <rect x="252" y="338" width="170" height="48" rx="24" fill="#e8eef7"/>
+  <text x="310" y="370" font-family="Arial, sans-serif" font-size="20" font-weight="800" fill="#22304a">Cancel</text>
+  <rect x="448" y="338" width="260" height="48" rx="24" fill="#ff7a59"/>
+  <text x="504" y="370" font-family="Arial, sans-serif" font-size="20" font-weight="800" fill="#ffffff">Move to Trash</text>
+</svg>

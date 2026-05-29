@@ -15,6 +15,35 @@ A kid-friendly memory matching game built with Flutter for macOS.
 - Local leaderboards saved with `shared_preferences`.
 - Animated 3D card flips.
 
+## Download And Install On macOS
+
+1. Open the newest GitHub release.
+2. Download the macOS zip file named like `kids-memory-trainer-macos-vX.X.X.zip`.
+
+![Download the macOS release zip](images/install-1-download.svg)
+
+3. Double-click the zip file to unzip it.
+4. Move `kids-memory-trainer.app` to the `Applications` folder.
+
+![Unzip the app and move it to Applications](images/install-2-unzip.svg)
+
+5. Open `Applications`, then double-click `kids-memory-trainer.app`.
+
+### If macOS Blocks The App
+
+The first open can be blocked by Gatekeeper, especially if the release was not notarized correctly. If macOS says the app cannot be opened or recommends moving it to the Trash, do not move it to the Trash.
+
+![macOS Gatekeeper first-open warning](images/install-3-gatekeeper.svg)
+
+Use one of these methods:
+
+- Right-click `kids-memory-trainer.app`, choose `Open`, then choose `Open` again.
+- Or open `System Settings` -> `Privacy & Security`, find the blocked app message, and click `Open Anyway`.
+
+![Use Open Anyway in Privacy and Security](images/install-4-open-anyway.svg)
+
+After this first approval, the app should open normally from `Applications`.
+
 ## Requirements
 
 - macOS

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="520" viewBox="0 0 960 520" role="img" aria-labelledby="title desc">
+  <title id="title">Unzip and move the app</title>
+  <desc id="desc">Illustration showing the zip file becoming an app and moving into Applications.</desc>
+  <rect width="960" height="520" rx="28" fill="#f6f8fb"/>
+  <rect x="82" y="78" width="300" height="320" rx="24" fill="#ffffff" stroke="#d5deea" stroke-width="4"/>
+  <path d="M200 130h86l52 52v154H200z" fill="#fff1a8" stroke="#ffd35b" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M286 130v52h52" fill="none" stroke="#ffd35b" stroke-width="5" stroke-linejoin="round"/>
+  <text x="187" y="365" font-family="Arial, sans-serif" font-size="26" font-weight="800" fill="#22304a">ZIP</text>
+  <text x="142" y="430" font-family="Arial, sans-serif" font-size="22" fill="#5c6b82">Double-click to unzip</text>
+  <path d="M428 238h104" fill="none" stroke="#3f8cff" stroke-width="12" stroke-linecap="round"/>
+  <path d="M506 202l36 36-36 36" fill="none" stroke="#3f8cff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="580" y="78" width="300" height="320" rx="24" fill="#ffffff" stroke="#d5deea" stroke-width="4"/>
+  <rect x="658" y="130" width="142" height="142" rx="32" fill="#a7e8ff" stroke="#6bceff" stroke-width="6"/>
+  <circle cx="705" cy="182" r="16" fill="#ffffff"/>
+  <circle cx="755" cy="182" r="16" fill="#ffffff"/>
+  <path d="M697 225q33 32 66 0" fill="none" stroke="#22304a" stroke-width="8" stroke-linecap="round"/>
+  <text x="649" y="365" font-family="Arial, sans-serif" font-size="26" font-weight="800" fill="#22304a">.app</text>
+  <text x="616" y="430" font-family="Arial, sans-serif" font-size="22" fill="#5c6b82">Move to Applications</text>
+</svg>
