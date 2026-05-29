@@ -87,6 +87,8 @@ Quality:
 
 -------- Latter list to generate --------
 
+### English
+
 Letter: A
 Animal: Adult Alligator
 Colors: Mint green + yellow
@@ -448,5 +450,385 @@ Letter: z
 Animal: Zebra Foal
 Colors: Soft red + cream
 Pose: Running playfully
+Size: Smaller and rounder
+Expression: Cute and innocent
+
+### Danish
+
+Letter: A
+Animal: Voksen Alligator
+Colors: Mint green + yellow
+Pose: Proud, standing tall
+Size: Slightly larger
+Expression: Friendly and confident
+
+Letter: a
+Animal: Baby Alligator
+Colors: Mint green + yellow
+Pose: Sitting or playing
+Size: Smaller and rounder
+Expression: Cute and innocent
+
+Letter: B
+Animal: Voksen Bjørn
+Colors: Sky blue + cream
+Pose: Proud, standing tall
+Size: Slightly larger
+Expression: Friendly and confident
+
+Letter: b
+Animal: Bjørneunge
+Colors: Sky blue + cream
+Pose: Sitting or playing
+Size: Smaller and rounder
+Expression: Cute and innocent
+
+Letter: C
+Animal: Voksen Cheetah
+Colors: Peach orange + yellow
+Pose: Proud, standing tall
+Size: Slightly larger
+Expression: Friendly and confident
+
+Letter: c
+Animal: Cheetahunge
+Colors: Peach orange + yellow
+Pose: Sitting or playing
+Size: Smaller and rounder
+Expression: Cute and innocent
+
+Letter: D
+Animal: Voksen Delfin
+Colors: Baby blue + cream
+Pose: Proud, standing tall
+Size: Slightly larger
+Expression: Friendly and confident
+
+Letter: d
+Animal: Delfinunge
+Colors: Baby blue + cream
+Pose: Sitting or playing
+Size: Smaller and rounder
+Expression: Cute and innocent
+
+Letter: E
+Animal: Voksen Elefant
+Colors: Lavender + blue
+Pose: Proud, standing tall
+Size: Slightly larger
+Expression: Friendly and confident
+
+Letter: e
+Animal: Elefantunge
+Colors: Lavender + blue
+Pose: Sitting or playing
+Size: Smaller and rounder
+Expression: Cute and innocent
+
+Letter: F
+Animal: Voksen Flamingo
+Colors: Coral pink + peach
+Pose: Proud, standing tall
+Size: Slightly larger
+Expression: Friendly and confident
+
+Letter: f
+Animal: Flamingounge
+Colors: Coral pink + peach
+Pose: Sitting or playing
+Size: Smaller and rounder
+Expression: Cute and innocent
+
+Letter: G
+Animal: Voksen Giraf
+Colors: Sunny yellow + peach
+Pose: Proud, standing tall
+Size: Slightly larger
+Expression: Friendly and confident
+
+Letter: g
+Animal: Girafunge
+Colors: Sunny yellow + peach
+Pose: Sitting or playing
+Size: Smaller and rounder
+Expression: Cute and innocent
+
+Letter: H
+Animal: Voksen Hest
+Colors: Caramel brown + cream
+Pose: Proud, standing tall
+Size: Slightly larger
+Expression: Friendly and confident
+
+Letter: h
+Animal: Føl
+Colors: Caramel brown + cream
+Pose: Sitting or playing
+Size: Smaller and rounder
+Expression: Cute and innocent
+
+Letter: I
+Animal: Voksen Isbjørn
+Colors: Ice blue + white
+Pose: Proud, standing tall
+Size: Slightly larger
+Expression: Friendly and confident
+
+Letter: i
+Animal: Isbjørneunge
+Colors: Ice blue + white
+Pose: Sitting or playing
+Size: Smaller and rounder
+Expression: Cute and innocent
+
+Letter: J
+Animal: Voksen Jaguar
+Colors: Golden yellow + brown
+Pose: Proud, standing tall
+Size: Slightly larger
+Expression: Friendly and confident
+
+Letter: j
+Animal: Jaguarunge
+Colors: Golden yellow + brown
+Pose: Sitting or playing
+Size: Smaller and rounder
+Expression: Cute and innocent
+
+Letter: K
+Animal: Voksen Koala
+Colors: Soft blue + silver
+Pose: Proud, standing tall
+Size: Slightly larger
+Expression: Friendly and confident
+
+Letter: k
+Animal: Koalaunge
+Colors: Soft blue + silver
+Pose: Sitting or playing
+Size: Smaller and rounder
+Expression: Cute and innocent
+
+Letter: L
+Animal: Voksen Løve
+Colors: Gold + cream
+Pose: Proud, standing tall
+Size: Slightly larger
+Expression: Friendly and confident
+
+Letter: l
+Animal: Løveunge
+Colors: Gold + cream
+Pose: Sitting or playing
+Size: Smaller and rounder
+Expression: Cute and innocent
+
+Letter: M
+Animal: Voksen Mus
+Colors: Light gray + pink
+Pose: Proud, standing tall
+Size: Slightly larger
+Expression: Friendly and confident
+
+Letter: m
+Animal: Museunge
+Colors: Light gray + pink
+Pose: Sitting or playing
+Size: Smaller and rounder
+Expression: Cute and innocent
+
+Letter: N
+Animal: Voksen Næsehorn
+Colors: Soft gray + blue
+Pose: Proud, standing tall
+Size: Slightly larger
+Expression: Friendly and confident
+
+Letter: n
+Animal: Næsehornsunge
+Colors: Soft gray + blue
+Pose: Sitting or playing
+Size: Smaller and rounder
+Expression: Cute and innocent
+
+Letter: O
+Animal: Voksen Odder
+Colors: Warm brown + aqua
+Pose: Proud, standing tall
+Size: Slightly larger
+Expression: Friendly and confident
+
+Letter: o
+Animal: Odderunge
+Colors: Warm brown + aqua
+Pose: Sitting or playing
+Size: Smaller and rounder
+Expression: Cute and innocent
+
+Letter: P
+Animal: Voksen Pingvin
+Colors: Ice blue + mint
+Pose: Proud, standing tall
+Size: Slightly larger
+Expression: Friendly and confident
+
+Letter: p
+Animal: Pingvinunge
+Colors: Ice blue + mint
+Pose: Sitting or playing
+Size: Smaller and rounder
+Expression: Cute and innocent
+
+Letter: Q
+Animal: Voksen Quetzal
+Colors: Emerald green + turquoise
+Pose: Proud, standing tall
+Size: Slightly larger
+Expression: Friendly and confident
+
+Letter: q
+Animal: Quetzalunge
+Colors: Emerald green + turquoise
+Pose: Sitting or playing
+Size: Smaller and rounder
+Expression: Cute and innocent
+
+Letter: R
+Animal: Voksen Ræv
+Colors: Orange + cream
+Pose: Proud, standing tall
+Size: Slightly larger
+Expression: Friendly and confident
+
+Letter: r
+Animal: Rævehvalp
+Colors: Orange + cream
+Pose: Sitting or playing
+Size: Smaller and rounder
+Expression: Cute and innocent
+
+Letter: S
+Animal: Voksen Sæl
+Colors: Ocean blue + gray
+Pose: Proud, standing tall
+Size: Slightly larger
+Expression: Friendly and confident
+
+Letter: s
+Animal: Sælunge
+Colors: Ocean blue + gray
+Pose: Sitting or playing
+Size: Smaller and rounder
+Expression: Cute and innocent
+
+Letter: T
+Animal: Voksen Tiger
+Colors: Orange + yellow
+Pose: Proud, standing tall
+Size: Slightly larger
+Expression: Friendly and confident
+
+Letter: t
+Animal: Tigerunge
+Colors: Orange + yellow
+Pose: Sitting or playing
+Size: Smaller and rounder
+Expression: Cute and innocent
+
+Letter: U
+Animal: Voksen Ugle
+Colors: Purple + cream
+Pose: Proud, standing tall
+Size: Slightly larger
+Expression: Friendly and confident
+
+Letter: u
+Animal: Ugleunge
+Colors: Purple + cream
+Pose: Sitting or playing
+Size: Smaller and rounder
+Expression: Cute and innocent
+
+Letter: V
+Animal: Voksen Vaskebjørn
+Colors: Gray + cream
+Pose: Proud, standing tall
+Size: Slightly larger
+Expression: Friendly and confident
+
+Letter: v
+Animal: Vaskebjørneunge
+Colors: Gray + cream
+Pose: Sitting or playing
+Size: Smaller and rounder
+Expression: Cute and innocent
+
+Letter: Y
+Animal: Voksen Yak
+Colors: Honey yellow + cream
+Pose: Proud, standing tall
+Size: Slightly larger
+Expression: Friendly and confident
+
+Letter: y
+Animal: Yakunge
+Colors: Honey yellow + cream
+Pose: Sitting or playing
+Size: Smaller and rounder
+Expression: Cute and innocent
+
+Letter: Z
+Animal: Voksen Zebra
+Colors: Soft red + cream
+Pose: Proud, standing tall
+Size: Slightly larger
+Expression: Friendly and confident
+
+Letter: z
+Animal: Zebraføl
+Colors: Soft red + cream
+Pose: Sitting or playing
+Size: Smaller and rounder
+Expression: Cute and innocent
+
+Letter: Æ
+Animal: Voksen Æsel
+Colors: Sandy beige + cream
+Pose: Proud, standing tall
+Size: Slightly larger
+Expression: Friendly and confident
+
+Letter: æ
+Animal: Æselføl
+Colors: Sandy beige + cream
+Pose: Sitting or playing
+Size: Smaller and rounder
+Expression: Cute and innocent
+
+Letter: Ø
+Animal: Voksen Ørn
+Colors: Golden brown + cream
+Pose: Proud, standing tall
+Size: Slightly larger
+Expression: Friendly and confident
+
+Letter: ø
+Animal: Ørneunge
+Colors: Golden brown + cream
+Pose: Sitting or playing
+Size: Smaller and rounder
+Expression: Cute and innocent
+
+Letter: Å
+Animal: Voksen Ål
+Colors: Aqua blue + mint
+Pose: Proud, standing tall
+Size: Slightly larger
+Expression: Friendly and confident
+
+Letter: å
+Animal: Lille Ål
+Colors: Aqua blue + mint
+Pose: Sitting or playing
 Size: Smaller and rounder
 Expression: Cute and innocent
