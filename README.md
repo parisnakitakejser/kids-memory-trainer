@@ -135,6 +135,26 @@ flutter pub get
 
 Then restart the app.
 
+## Scorer Logic
+
+The live scoreboard and game-over screen show:
+
+- `Tries`: one try is counted every time two cards have been flipped.
+- `Ratio`: matches divided by tries. For example, 1 match in 2 tries is `0.5`, and 1 match in 10 tries is `0.1`.
+- `Scorer`: a higher number is better for the scorer board.
+
+Scorer formula:
+
+```text
+scorer = (matches * 100) + (ratio * 1000) - (seconds * 2) - (tries * 5)
+```
+
+This means matches and accuracy add points, while time and too many tries reduce the scorer. For example, with about the same matches, `30s`, `100` tries, and `0.2` ratio ranks lower than `35s`, `70` tries, and `0.3` ratio because the second game was played with better memory accuracy.
+
+Only the top 25 scores are kept for each game type, player mode, and language bucket. If a single-player result reaches the top 25, the player can enter a name; skipping uses `Player 1`. Multiplayer uses the entered player names.
+
+The scorer board is split by card mode. Letters can be viewed globally or by language.
+
 ## Project Structure
 
 ```text

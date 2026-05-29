@@ -94,11 +94,17 @@ class AppStrings {
       );
 
   String get viewLeaderboard => _pick(
-        en: 'View Leaderboard',
-        da: 'Se rekordliste',
+        en: 'View Scorer Board',
+        da: 'Se scorerliste',
       );
 
-  String get leaderboard => _pick(en: 'Leaderboard', da: 'Rekordliste');
+  String get leaderboard => _pick(en: 'Scorer Board', da: 'Scorerliste');
+
+  String get global => _pick(en: 'Global', da: 'Global');
+
+  String get english => _pick(en: 'English', da: 'Engelsk');
+
+  String get danish => _pick(en: 'Danish', da: 'Dansk');
 
   String get noScoresYet => _pick(
         en: 'No scores yet. Play a game!',
@@ -106,8 +112,8 @@ class AppStrings {
       );
 
   String get singlePlayerFastest => _pick(
-        en: 'Single Player (Fastest)',
-        da: 'Alene (hurtigst)',
+        en: 'Single Player',
+        da: 'Alene',
       );
 
   String get multiplayerTopScores => _pick(
@@ -116,6 +122,19 @@ class AppStrings {
       );
 
   String points(int score) => _pick(en: '$score pts', da: '$score point');
+
+  String get scorer => _pick(en: 'Scorer', da: 'Scorer');
+
+  String get highScore => _pick(en: 'Highscore!', da: 'Rekord!');
+
+  String get highScoreNamePrompt => _pick(
+        en: 'Enter a name for the scorer board.',
+        da: 'Skriv et navn til scorerlisten.',
+      );
+
+  String get playerName => _pick(en: 'Player name', da: 'Spillernavn');
+
+  String get skip => _pick(en: 'Skip', da: 'Spring over');
 
   String get enterNames => _pick(
         en: 'Please enter names for both players.',
@@ -212,6 +231,8 @@ class AppStrings {
         en: 'Completed in $seconds seconds!',
         da: 'Klar på $seconds sekunder!',
       );
+
+  String seconds(int seconds) => _pick(en: '${seconds}s', da: '${seconds}s');
 
   String get mainMenu => _pick(en: 'Main Menu', da: 'Hovedmenu');
 

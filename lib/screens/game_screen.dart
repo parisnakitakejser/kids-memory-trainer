@@ -33,6 +33,7 @@ class _GameScreenState extends State<GameScreen> {
   GameState? _gameState;
   final StorageService _storageService = StorageService();
   late int _activeGridSize;
+  AppLanguage _activeLanguage = AppLanguage.english;
   String? _lastMatchSoundCardId;
   bool _gameOverHandled = false;
 
@@ -45,6 +46,7 @@ class _GameScreenState extends State<GameScreen> {
 
   Future<void> _loadGame() async {
     final language = AppSettingsScope.read(context).language;
+    _activeLanguage = language;
     final themeAssets = await ThemeAssetService.loadAssetsForTheme(
       widget.theme,
       language: language,
@@ -104,6 +106,8 @@ class _GameScreenState extends State<GameScreen> {
     final gameState = _gameState;
     if (gameState == null) return;
     final strings = AppStrings.of(context);
+    final languageCode =
+        widget.theme == GameTheme.letters ? _activeLanguage.code : null;
 
     if (widget.isMultiplayer) {
       final winner =
@@ -112,15 +116,29 @@ class _GameScreenState extends State<GameScreen> {
         playerName: winner.name,
         score: winner.score,
         timeInSeconds: 0,
+        tries: winner.tries,
+        successRatio: winner.successRatio,
         mode: 'multi',
+        theme: widget.theme.assetFolder,
+        languageCode: languageCode,
       ));
     } else {
-      await _storageService.saveScore(ScoreEntry(
+      final scoreEntry = ScoreEntry(
         playerName: 'Player 1',
         score: gameState.matchedPairs,
         timeInSeconds: gameState.elapsedSeconds,
+        tries: gameState.tries,
+        successRatio: gameState.successRatio,
         mode: 'single',
-      ));
+        theme: widget.theme.assetFolder,
+        languageCode: languageCode,
+      );
+
+      final qualifies = await _storageService.qualifiesForHighScore(scoreEntry);
+      final playerName = qualifies ? await _askForHighScoreName() : null;
+      await _storageService.saveScore(
+        scoreEntry.copyWith(playerName: playerName ?? 'Player 1'),
+      );
     }
 
     if (!mounted) return;
@@ -137,6 +155,17 @@ class _GameScreenState extends State<GameScreen> {
         builder: (context) => _WinnerPortalDialog(
           winnerName: winner.name,
           scoreText: strings.winnerScore(winner.score),
+          stats: [
+            _ScoreStat(label: strings.tries, value: '${winner.tries}'),
+            _ScoreStat(
+              label: strings.ratio,
+              value: _formatRatio(winner.successRatio),
+            ),
+            _ScoreStat(
+              label: strings.scorer,
+              value: _formatScorer(_playerScorer(winner)),
+            ),
+          ],
           title: strings.winnerPortalTitle,
           mainMenuLabel: strings.mainMenu,
         ),
@@ -150,13 +179,21 @@ class _GameScreenState extends State<GameScreen> {
       builder: (context) => AlertDialog(
         title: Text(strings.gameOver,
             style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
-        content: Text(
-          widget.isMultiplayer
-              ? strings.winner(gameState.players
-                  .reduce((a, b) => a.score > b.score ? a : b)
-                  .name)
-              : strings.completedIn(gameState.elapsedSeconds),
-          style: const TextStyle(fontSize: 18),
+        content: _GameOverStats(
+          headline: strings.completedIn(gameState.elapsedSeconds),
+          stats: [
+            _ScoreStat(
+                label: strings.matches, value: '${gameState.matchedPairs}'),
+            _ScoreStat(label: strings.tries, value: '${gameState.tries}'),
+            _ScoreStat(
+              label: strings.ratio,
+              value: _formatRatio(gameState.successRatio),
+            ),
+            _ScoreStat(
+              label: strings.scorer,
+              value: _formatScorer(_singlePlayerScorer(gameState)),
+            ),
+          ],
         ),
         actions: [
           TextButton(
@@ -169,6 +206,59 @@ class _GameScreenState extends State<GameScreen> {
         ],
       ),
     );
+  }
+
+  Future<String?> _askForHighScoreName() async {
+    final strings = AppStrings.of(context);
+    final controller = TextEditingController();
+
+    final name = await showDialog<String?>(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: Text(strings.highScore),
+          content: SizedBox(
+            width: 360,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(strings.highScoreNamePrompt),
+                const SizedBox(height: 14),
+                TextField(
+                  controller: controller,
+                  autofocus: true,
+                  decoration: InputDecoration(
+                    labelText: strings.playerName,
+                    prefixIcon: const Icon(Icons.person),
+                  ),
+                  textInputAction: TextInputAction.done,
+                  onSubmitted: (value) {
+                    Navigator.of(dialogContext).pop(value.trim());
+                  },
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(null),
+              child: Text(strings.skip),
+            ),
+            FilledButton(
+              onPressed: () =>
+                  Navigator.of(dialogContext).pop(controller.text.trim()),
+              child: Text(strings.apply),
+            ),
+          ],
+        );
+      },
+    );
+
+    controller.dispose();
+    if (name == null || name.isEmpty) return null;
+    return name;
   }
 
   Future<void> _showSettings() async {
@@ -510,6 +600,10 @@ class _SinglePlayerScores extends StatelessWidget {
             _ScoreStat(
                 label: strings.ratio,
                 value: _formatRatio(gameState.successRatio)),
+            _ScoreStat(
+              label: strings.scorer,
+              value: _formatScorer(_singlePlayerScorer(gameState)),
+            ),
           ],
         ),
         const SizedBox(height: 12),
@@ -606,6 +700,10 @@ class _PlayerScorePanel extends StatelessWidget {
                 label: AppStrings.of(context).ratio,
                 value: _formatRatio(player.successRatio),
               ),
+              _ScoreStat(
+                label: AppStrings.of(context).scorer,
+                value: _formatScorer(_playerScorer(player)),
+              ),
             ],
           ),
           if (!compact) const SizedBox(height: 10),
@@ -667,6 +765,58 @@ class _ScoreStatsRow extends StatelessWidget {
 }
 
 String _formatRatio(double ratio) => ratio.toStringAsFixed(1);
+
+String _formatScorer(double scorer) => scorer.round().toString();
+
+double _singlePlayerScorer(GameState gameState) {
+  return ScoreEntry(
+    playerName: 'Player 1',
+    score: gameState.matchedPairs,
+    timeInSeconds: gameState.elapsedSeconds,
+    tries: gameState.tries,
+    successRatio: gameState.successRatio,
+    mode: 'single',
+    theme: gameState.theme.assetFolder,
+  ).scorer;
+}
+
+double _playerScorer(Player player) {
+  return ScoreEntry(
+    playerName: player.name,
+    score: player.score,
+    timeInSeconds: 0,
+    tries: player.tries,
+    successRatio: player.successRatio,
+    mode: 'multi',
+    theme: 'animals',
+  ).scorer;
+}
+
+class _GameOverStats extends StatelessWidget {
+  final String headline;
+  final List<_ScoreStat> stats;
+
+  const _GameOverStats({
+    required this.headline,
+    required this.stats,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          headline,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+        ),
+        const SizedBox(height: 16),
+        _ScoreStatsRow(stats: stats),
+      ],
+    );
+  }
+}
 
 class _ScoreHeader extends StatelessWidget {
   final String title;
@@ -1042,12 +1192,14 @@ class _CelebrationCardFace extends StatelessWidget {
 class _WinnerPortalDialog extends StatelessWidget {
   final String winnerName;
   final String scoreText;
+  final List<_ScoreStat> stats;
   final String title;
   final String mainMenuLabel;
 
   const _WinnerPortalDialog({
     required this.winnerName,
     required this.scoreText,
+    required this.stats,
     required this.title,
     required this.mainMenuLabel,
   });
@@ -1152,6 +1304,8 @@ class _WinnerPortalDialog extends StatelessWidget {
                         fontWeight: FontWeight.w900,
                       ),
                 ),
+                const SizedBox(height: 12),
+                _ScoreStatsRow(stats: stats),
                 const SizedBox(height: 26),
                 FilledButton.icon(
                   onPressed: () {

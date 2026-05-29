@@ -1,5 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:memory_game/models/game_state.dart';
+import 'package:memory_game/services/storage_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   test('counts tries and calculates success ratio', () async {
@@ -49,5 +51,54 @@ void main() {
 
     await Future<void>.delayed(const Duration(milliseconds: 1100));
     gameState.dispose();
+  });
+
+  test('scorer ranks accurate games above faster inaccurate games', () {
+    final fastInaccurate = ScoreEntry(
+      playerName: 'Fast',
+      score: 20,
+      timeInSeconds: 30,
+      tries: 100,
+      successRatio: 0.2,
+      mode: 'single',
+      theme: 'animals',
+    );
+    final slowerAccurate = ScoreEntry(
+      playerName: 'Accurate',
+      score: 21,
+      timeInSeconds: 35,
+      tries: 70,
+      successRatio: 0.3,
+      mode: 'single',
+      theme: 'animals',
+    );
+
+    expect(slowerAccurate.scorer, greaterThan(fastInaccurate.scorer));
+  });
+
+  test('stores only top 25 scores per board bucket', () async {
+    SharedPreferences.setMockInitialValues({});
+
+    final storage = StorageService();
+    for (var i = 0; i < 30; i++) {
+      await storage.saveScore(ScoreEntry(
+        playerName: 'Player $i',
+        score: i,
+        timeInSeconds: 30,
+        tries: 30 - i,
+        successRatio: i / 30,
+        mode: 'single',
+        theme: 'animals',
+      ));
+    }
+
+    final scores = await storage.getScores(
+      mode: 'single',
+      theme: 'animals',
+    );
+
+    expect(scores, hasLength(ScoreEntry.topScoreLimit));
+    expect(scores.first.playerName, 'Player 29');
+    expect(scores.last.playerName, 'Player 5');
   });
 }
