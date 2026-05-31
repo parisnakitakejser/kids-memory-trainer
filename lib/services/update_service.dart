@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 
 class UpdateInfo {
   final String version;
@@ -79,9 +80,95 @@ class UpdateService {
     }
   }
 
-  Future<void> openInstaller(File file) async {
+  Future<void> installUpdate(File file) async {
     if (!Platform.isMacOS) return;
+
+    if (file.path.toLowerCase().endsWith('.zip')) {
+      await _installZipUpdate(file);
+      return;
+    }
+
     await Process.run('open', [file.path]);
+  }
+
+  Future<void> _installZipUpdate(File file) async {
+    final currentApp = _currentAppBundle();
+    if (currentApp == null) {
+      await Process.run('open', [file.path]);
+      return;
+    }
+
+    final workDir =
+        await Directory.systemTemp.createTemp('kids_memory_update_');
+    final extractDir = Directory('${workDir.path}/extract');
+    await extractDir.create();
+
+    final unzipResult = await Process.run('ditto', [
+      '-x',
+      '-k',
+      file.path,
+      extractDir.path,
+    ]);
+    if (unzipResult.exitCode != 0) {
+      throw const ProcessException('ditto', [], 'Could not extract update');
+    }
+
+    final appBundle = await _findAppBundle(extractDir);
+    if (appBundle == null) {
+      throw const FileSystemException('No app bundle found in update archive');
+    }
+
+    final script = File('${workDir.path}/install_update.sh');
+    await script.writeAsString('''
+#!/bin/bash
+set -euo pipefail
+new_app="\$1"
+current_app="\$2"
+work_dir="\$3"
+
+sleep 1
+rm -rf "\${current_app}.old"
+if [ -d "\$current_app" ]; then
+  mv "\$current_app" "\${current_app}.old"
+fi
+ditto "\$new_app" "\$current_app"
+rm -rf "\${current_app}.old"
+open "\$current_app"
+rm -rf "\$work_dir"
+''');
+    await Process.run('chmod', ['+x', script.path]);
+    await Process.start(
+        script.path,
+        [
+          appBundle.path,
+          currentApp.path,
+          workDir.path,
+        ],
+        mode: ProcessStartMode.detached);
+
+    SystemNavigator.pop();
+    exit(0);
+  }
+
+  Directory? _currentAppBundle() {
+    var directory = File(Platform.resolvedExecutable).parent;
+
+    while (directory.path != directory.parent.path) {
+      if (directory.path.endsWith('.app')) return directory;
+      directory = directory.parent;
+    }
+
+    return null;
+  }
+
+  Future<Directory?> _findAppBundle(Directory directory) async {
+    await for (final entity in directory.list(recursive: true)) {
+      if (entity is Directory && entity.path.endsWith('.app')) {
+        return entity;
+      }
+    }
+
+    return null;
   }
 
   static String _normalizeVersion(String version) {

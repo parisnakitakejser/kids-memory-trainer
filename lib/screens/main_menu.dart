@@ -115,7 +115,7 @@ class _MainMenuState extends State<MainMenu> {
                           try {
                             final file =
                                 await _updateService.downloadUpdate(update);
-                            await _updateService.openInstaller(file);
+                            await _updateService.installUpdate(file);
 
                             if (dialogContext.mounted) {
                               Navigator.of(dialogContext).pop();

@@ -184,8 +184,8 @@ class AppStrings {
       );
 
   String get updateOpened => _pick(
-        en: 'The update was downloaded and opened.',
-        da: 'Opdateringen blev downloadet og åbnet.',
+        en: 'The update was downloaded and started.',
+        da: 'Opdateringen blev downloadet og startet.',
       );
 
   String get updateFailed => _pick(
