@@ -23,8 +23,8 @@ flutter:
   assets:
     - images/
     - build_assets/animals/
+    - build_assets/numbers/
+    - build_assets/letters/en/
+    - build_assets/letters/da/
+    - build_assets/colors/
     - assets/sounds/
-    - assets/numbers/
-    - assets/letters/en/
-    - assets/letters/da/
-    - assets/colors/

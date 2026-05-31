@@ -118,10 +118,10 @@ The original animal images live in:
 assets/animals/
 ```
 
-Release builds use optimized generated copies from:
+Release builds use optimized generated copies from matching folders in:
 
 ```text
-build_assets/animals/
+build_assets/
 ```
 
 Before building a release, regenerate the optimized copies:
@@ -130,7 +130,7 @@ Before building a release, regenerate the optimized copies:
 ./tool/optimize_assets.sh
 ```
 
-By default this creates `512 x 512 px` JPEG card images. You can change the max size if needed:
+By default this creates `512 x 512 px` JPEG card images for animals, numbers, letters, and colors. Sounds are not changed. You can change the max size if needed:
 
 ```bash
 MAX_IMAGE_SIZE=768 ./tool/optimize_assets.sh
@@ -153,7 +153,7 @@ If a theme folder has enough images, the game uses those images. If it does not 
 - Letters use letters.
 - Colors use generated card colors.
 
-So if `build_assets/animals/` has 12 images and the player starts a `6x6` game, the first 12 pairs use images and the remaining 6 pairs use animal emoji.
+So if `build_assets/animals/` has 12 images and the player starts a `6x6` game, 12 random pairs use images and the remaining 6 pairs use animal emoji.
 
 After adding new assets, run:
 

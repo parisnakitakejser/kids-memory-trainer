@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SOURCE_DIR="${1:-assets/animals}"
-OUTPUT_DIR="${2:-build_assets/animals}"
 MAX_SIZE="${MAX_IMAGE_SIZE:-512}"
 
 if ! command -v sips >/dev/null 2>&1; then
@@ -10,23 +8,43 @@ if ! command -v sips >/dev/null 2>&1; then
   exit 1
 fi
 
-mkdir -p "$OUTPUT_DIR"
+optimize_folder() {
+  local source_dir="$1"
+  local output_dir="$2"
 
-find "$OUTPUT_DIR" -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' \) -delete
+  mkdir -p "$output_dir"
+  find "$output_dir" -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' \) -delete
 
-while IFS= read -r -d '' source_file; do
-  file_name="$(basename "${source_file%.*}").jpg"
-  output_file="$OUTPUT_DIR/$file_name"
+  while IFS= read -r -d '' source_file; do
+    file_name="$(basename "${source_file%.*}").jpg"
+    output_file="$output_dir/$file_name"
 
-  sips \
-    --resampleHeightWidthMax "$MAX_SIZE" \
-    --setProperty format jpeg \
-    --setProperty formatOptions 74 \
-    "$source_file" \
-    --out "$output_file" >/dev/null
-done < <(find "$SOURCE_DIR" -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' \) -print0 | sort -z)
+    sips \
+      --resampleHeightWidthMax "$MAX_SIZE" \
+      --setProperty format jpeg \
+      --setProperty formatOptions 74 \
+      "$source_file" \
+      --out "$output_file" >/dev/null
+  done < <(find "$source_dir" -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' \) -print0 | sort -z)
 
-original_size="$(du -sh "$SOURCE_DIR" | awk '{print $1}')"
-optimized_size="$(du -sh "$OUTPUT_DIR" | awk '{print $1}')"
+  if ! find "$output_dir" -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' \) | grep -q .; then
+    touch "$output_dir/.gitkeep"
+  fi
 
-echo "Optimized animal images: $SOURCE_DIR ($original_size) -> $OUTPUT_DIR ($optimized_size)"
+  original_size="$(du -sh "$source_dir" | awk '{print $1}')"
+  optimized_size="$(du -sh "$output_dir" | awk '{print $1}')"
+
+  echo "Optimized images: $source_dir ($original_size) -> $output_dir ($optimized_size)"
+}
+
+if [ "$#" -ge 1 ]; then
+  default_output="build_assets/${1#assets/}"
+  optimize_folder "$1" "${2:-$default_output}"
+  exit 0
+fi
+
+optimize_folder "assets/animals" "build_assets/animals"
+optimize_folder "assets/numbers" "build_assets/numbers"
+optimize_folder "assets/letters/en" "build_assets/letters/en"
+optimize_folder "assets/letters/da" "build_assets/letters/da"
+optimize_folder "assets/colors" "build_assets/colors"
