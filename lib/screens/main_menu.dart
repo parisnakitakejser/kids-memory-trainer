@@ -47,9 +47,34 @@ class _MainMenuState extends State<MainMenu> {
     _checkedForUpdate = true;
 
     final update = await _updateService.checkForUpdate();
-    if (!mounted || update == null) return;
+    if (!mounted) return;
+
+    if (update == null) {
+      await _showUpToDateDialog();
+      return;
+    }
 
     await _showUpdateDialog(update);
+  }
+
+  Future<void> _showUpToDateDialog() async {
+    await showDialog<void>(
+      context: context,
+      builder: (dialogContext) {
+        final dialogStrings = AppStrings.of(context);
+
+        return AlertDialog(
+          title: Text(dialogStrings.gameUpToDate),
+          content: Text(dialogStrings.gameUpToDateBody),
+          actions: [
+            FilledButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: Text(dialogStrings.close),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Future<void> _showUpdateDialog(UpdateInfo update) async {

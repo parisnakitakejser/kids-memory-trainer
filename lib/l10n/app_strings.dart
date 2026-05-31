@@ -161,6 +161,16 @@ class AppStrings {
         da: 'Version $version er klar til download og installation.',
       );
 
+  String get gameUpToDate => _pick(
+        en: 'Game is up to date',
+        da: 'Spillet er opdateret',
+      );
+
+  String get gameUpToDateBody => _pick(
+        en: 'You already have the newest version.',
+        da: 'Du har allerede den nyeste version.',
+      );
+
   String get downloadAndInstall => _pick(
         en: 'Download and Install',
         da: 'Download og installer',
