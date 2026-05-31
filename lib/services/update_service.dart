@@ -31,7 +31,7 @@ class UpdateService {
       final request = await client.getUrl(_releasesUrl);
       request.headers
           .set(HttpHeaders.acceptHeader, 'application/vnd.github+json');
-      request.headers.set(HttpHeaders.userAgentHeader, 'kids-memory-trainer');
+      request.headers.set(HttpHeaders.userAgentHeader, 'Kids Memory Trainer');
 
       final response = await request.close();
       if (response.statusCode == HttpStatus.notFound) return null;
@@ -63,7 +63,7 @@ class UpdateService {
     final client = HttpClient();
     try {
       final request = await client.getUrl(update.downloadUrl);
-      request.headers.set(HttpHeaders.userAgentHeader, 'kids-memory-trainer');
+      request.headers.set(HttpHeaders.userAgentHeader, 'Kids Memory Trainer');
 
       final response = await request.close();
       if (response.statusCode < 200 || response.statusCode >= 300) {

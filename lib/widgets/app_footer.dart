@@ -14,36 +14,36 @@ class AppFooter extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.46),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color: const Color(0xFF22304A).withValues(alpha: 0.08),
+          color: const Color(0xFF22304A).withValues(alpha: 0.05),
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             const Text(
               'v${UpdateService.currentVersion}',
               style: TextStyle(
-                color: Color(0xFF22304A),
-                fontSize: 12,
-                fontWeight: FontWeight.w900,
+                color: Color(0xFF6C7890),
+                fontSize: 10,
+                fontWeight: FontWeight.w700,
               ),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 7),
             InkWell(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(6),
               onTap: LinkService.openGitHubProfile,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 1),
                 child: Text(
                   strings.createdBy,
                   style: const TextStyle(
-                    color: Color(0xFF31415F),
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF6C7890),
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),

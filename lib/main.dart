@@ -38,7 +38,7 @@ class _MemoryGameAppState extends State<MemoryGameApp> {
     return AppSettingsScope(
       controller: _settingsController,
       child: MaterialApp(
-        title: 'Memory Game',
+        title: 'Kids Memory Trainer',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(

@@ -24,8 +24,8 @@ class AppStrings {
   }
 
   String get appTitle => _pick(
-        en: 'Kids Memory Game',
-        da: 'Huskespil for børn',
+        en: 'Kids Memory Trainer',
+        da: 'Kids Memory Trainer',
       );
 
   String get menuSubtitle => _pick(
@@ -162,13 +162,13 @@ class AppStrings {
       );
 
   String get gameUpToDate => _pick(
-        en: 'Game is up to date',
-        da: 'Spillet er opdateret',
+        en: 'Ready for more memory fun!',
+        da: 'Klar til mere hukommelsessjov!',
       );
 
   String get gameUpToDateBody => _pick(
-        en: 'You already have the newest version.',
-        da: 'Du har allerede den nyeste version.',
+        en: 'Kids Memory Trainer is up to date. Happy playing!',
+        da: 'Kids Memory Trainer er opdateret. God fornøjelse!',
       );
 
   String get downloadAndInstall => _pick(

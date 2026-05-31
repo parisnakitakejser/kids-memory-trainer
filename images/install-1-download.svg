@@ -13,7 +13,7 @@
   <rect x="118" y="282" width="724" height="86" rx="18" fill="#fff1a8" stroke="#ffd35b" stroke-width="4"/>
   <path d="M166 305v34m0 0l-15-15m15 15l15-15" fill="none" stroke="#22304a" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
   <rect x="145" y="349" width="42" height="8" rx="4" fill="#22304a"/>
-  <text x="220" y="335" font-family="Arial, sans-serif" font-size="28" font-weight="800" fill="#22304a">kids-memory-trainer-macos-vX.X.X.zip</text>
+  <text x="220" y="335" font-family="Arial, sans-serif" font-size="28" font-weight="800" fill="#22304a">Kids Memory Trainer macOS vX.X.X.zip</text>
   <text x="220" y="362" font-family="Arial, sans-serif" font-size="18" fill="#5c6b82">Release asset</text>
   <rect x="650" y="304" width="160" height="42" rx="21" fill="#24b47e"/>
   <text x="696" y="333" font-family="Arial, sans-serif" font-size="20" font-weight="800" fill="#ffffff">Download</text>

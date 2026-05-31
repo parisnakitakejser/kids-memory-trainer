@@ -1,4 +1,4 @@
-# macOS Memory Game
+# Kids Memory Trainer
 
 A kid-friendly memory matching game built with Flutter for macOS.
 
@@ -18,16 +18,16 @@ A kid-friendly memory matching game built with Flutter for macOS.
 ## Download And Install On macOS
 
 1. Open the newest GitHub release.
-2. Download the macOS zip file named like `kids-memory-trainer-macos-vX.X.X.zip`.
+2. Download the macOS zip file named like `Kids Memory Trainer macOS vX.X.X.zip`.
 
 ![Download the macOS release zip](images/install-1-download.svg)
 
 3. Double-click the zip file to unzip it.
-4. Move `kids-memory-trainer.app` to the `Applications` folder.
+4. Move `Kids Memory Trainer.app` to the `Applications` folder.
 
 ![Unzip the app and move it to Applications](images/install-2-unzip.svg)
 
-5. Open `Applications`, then double-click `kids-memory-trainer.app`.
+5. Open `Applications`, then double-click `Kids Memory Trainer.app`.
 
 ### If macOS Blocks The App
 
@@ -37,7 +37,7 @@ The first open can be blocked by Gatekeeper, especially if the release was not n
 
 Use one of these methods:
 
-- Right-click `kids-memory-trainer.app`, choose `Open`, then choose `Open` again.
+- Right-click `Kids Memory Trainer.app`, choose `Open`, then choose `Open` again.
 - Or open `System Settings` -> `Privacy & Security`, find the blocked app message, and click `Open Anyway`.
 
 ![Use Open Anyway in Privacy and Security](images/install-4-open-anyway.svg)
@@ -218,25 +218,25 @@ flutter build macos --release
 The built app will be here:
 
 ```text
-build/macos/Build/Products/Release/kids-memory-trainer.app
+build/macos/Build/Products/Release/Kids Memory Trainer.app
 ```
 
 You can open it directly from Finder, or run:
 
 ```bash
-open build/macos/Build/Products/Release/kids-memory-trainer.app
+open "build/macos/Build/Products/Release/Kids Memory Trainer.app"
 ```
 
 To make a zip file that is easier to share:
 
 ```bash
-ditto -c -k --sequesterRsrc --keepParent build/macos/Build/Products/Release/kids-memory-trainer.app kids-memory-trainer-macos.zip
+ditto -c -k --sequesterRsrc --keepParent "build/macos/Build/Products/Release/Kids Memory Trainer.app" "Kids Memory Trainer macOS.zip"
 ```
 
 The zip file will be created at:
 
 ```text
-kids-memory-trainer-macos.zip
+Kids Memory Trainer macOS.zip
 ```
 
 ### Sharing Outside Your Mac
@@ -312,13 +312,13 @@ GitHub Actions will then:
 - submit the app to Apple notarization
 - staple the notarization ticket
 - validate the app with Gatekeeper
-- package `kids-memory-trainer.app` into a zip file
+- package `Kids Memory Trainer.app` into a zip file
 - upload the zip to the GitHub Release
 
 The release download will be named like:
 
 ```text
-kids-memory-trainer-macos-v1.0.0.zip
+Kids Memory Trainer macOS v1.0.0.zip
 ```
 
 The workflow file is:

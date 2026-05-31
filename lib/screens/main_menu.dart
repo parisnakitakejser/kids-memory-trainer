@@ -64,6 +64,11 @@ class _MainMenuState extends State<MainMenu> {
         final dialogStrings = AppStrings.of(context);
 
         return AlertDialog(
+          icon: const Icon(
+            Icons.celebration_rounded,
+            color: Color(0xFFFF7A59),
+            size: 42,
+          ),
           title: Text(dialogStrings.gameUpToDate),
           content: Text(dialogStrings.gameUpToDateBody),
           actions: [
