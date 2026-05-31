@@ -356,6 +356,7 @@ class GameState extends ChangeNotifier {
   void _initializeBoard() {
     final int totalPairs = (gridSize * gridSize) ~/ 2;
     final List<Color> palette = _generatePalette(totalPairs);
+    final List<String> shuffledThemeAssets = List.of(themeAssets)..shuffle();
 
     const uuid = Uuid();
     for (int i = 0; i < totalPairs; i++) {
@@ -365,29 +366,29 @@ class GameState extends ChangeNotifier {
 
       switch (theme) {
         case GameTheme.animals:
-          if (i < themeAssets.length) {
-            assetPath = themeAssets[i];
+          if (i < shuffledThemeAssets.length) {
+            assetPath = shuffledThemeAssets[i];
           } else {
             content = _animalEmojis[i];
           }
           break;
         case GameTheme.numbers:
-          if (i < themeAssets.length) {
-            assetPath = themeAssets[i];
+          if (i < shuffledThemeAssets.length) {
+            assetPath = shuffledThemeAssets[i];
           } else {
             content = '${i + 1}';
           }
           break;
         case GameTheme.letters:
-          if (i < themeAssets.length) {
-            assetPath = themeAssets[i];
+          if (i < shuffledThemeAssets.length) {
+            assetPath = shuffledThemeAssets[i];
           } else {
             content = fallbackLetters[i % fallbackLetters.length];
           }
           break;
         case GameTheme.colors:
-          if (i < themeAssets.length) {
-            assetPath = themeAssets[i];
+          if (i < shuffledThemeAssets.length) {
+            assetPath = shuffledThemeAssets[i];
           } else {
             content = null;
           }

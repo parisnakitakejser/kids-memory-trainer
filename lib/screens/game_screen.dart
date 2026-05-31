@@ -448,6 +448,7 @@ class _GameScreenState extends State<GameScreen> {
             final scoreboard = _Scoreboard(
               gameState: gameState,
               isMultiplayer: widget.isMultiplayer,
+              compact: !useSideScoreboard,
             );
             final board = _FittedGameBoard(
               gameState: gameState,
@@ -545,10 +546,12 @@ class _FittedGameBoard extends StatelessWidget {
 class _Scoreboard extends StatelessWidget {
   final GameState gameState;
   final bool isMultiplayer;
+  final bool compact;
 
   const _Scoreboard({
     required this.gameState,
     required this.isMultiplayer,
+    this.compact = false,
   });
 
   @override
@@ -569,8 +572,8 @@ class _Scoreboard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(14.0),
         child: isMultiplayer
-            ? _MultiplayerScores(gameState: gameState)
-            : _SinglePlayerScores(gameState: gameState),
+            ? _MultiplayerScores(gameState: gameState, compact: compact)
+            : _SinglePlayerScores(gameState: gameState, compact: compact),
       ),
     );
   }
@@ -578,8 +581,12 @@ class _Scoreboard extends StatelessWidget {
 
 class _SinglePlayerScores extends StatelessWidget {
   final GameState gameState;
+  final bool compact;
 
-  const _SinglePlayerScores({required this.gameState});
+  const _SinglePlayerScores({
+    required this.gameState,
+    this.compact = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -608,7 +615,7 @@ class _SinglePlayerScores extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         Expanded(
-          child: _MatchedCardWrap(cards: matchedCards),
+          child: _MatchedCardWrap(cards: matchedCards, compact: compact),
         ),
       ],
     );
@@ -617,14 +624,18 @@ class _SinglePlayerScores extends StatelessWidget {
 
 class _MultiplayerScores extends StatelessWidget {
   final GameState gameState;
+  final bool compact;
 
-  const _MultiplayerScores({required this.gameState});
+  const _MultiplayerScores({
+    required this.gameState,
+    this.compact = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final isCompact = constraints.maxHeight < 180;
+        final isCompact = compact || constraints.maxHeight < 180;
 
         if (isCompact) {
           return Row(
@@ -708,7 +719,12 @@ class _PlayerScorePanel extends StatelessWidget {
           ),
           if (!compact) const SizedBox(height: 10),
           if (!compact)
-            Expanded(child: _MatchedCardWrap(cards: player.matchedCards)),
+            Expanded(
+              child: _MatchedCardWrap(
+                cards: player.matchedCards,
+                compact: compact,
+              ),
+            ),
         ],
       ),
     );
@@ -859,21 +875,27 @@ class _ScoreHeader extends StatelessWidget {
 
 class _MatchedCardWrap extends StatelessWidget {
   final List<CardModel> cards;
+  final bool compact;
 
-  const _MatchedCardWrap({required this.cards});
+  const _MatchedCardWrap({
+    required this.cards,
+    this.compact = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
         const spacing = 6.0;
-        const columns = 4;
+        final columns = compact ? 4 : 2;
         final rows = (cards.length / columns).ceil().clamp(1, 99);
         final widthSize =
             (constraints.maxWidth - spacing * (columns - 1)) / columns;
         final heightSize =
             (constraints.maxHeight - spacing * (rows - 1)) / rows;
-        final tileSize = math.min(widthSize, heightSize).clamp(18.0, 48.0);
+        final maxTileSize = compact ? 48.0 : 96.0;
+        final tileSize =
+            math.min(widthSize, heightSize).clamp(18.0, maxTileSize);
 
         return Wrap(
           spacing: spacing,

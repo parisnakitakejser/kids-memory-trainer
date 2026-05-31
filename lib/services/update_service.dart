@@ -16,7 +16,8 @@ class UpdateInfo {
 }
 
 class UpdateService {
-  static const String currentVersion = '1.0.0';
+  static const String currentVersion =
+      String.fromEnvironment('APP_VERSION', defaultValue: '1.0.0');
   static final Uri _latestReleaseUrl = Uri.https(
     'api.github.com',
     '/repos/parisnakitakejser/kids-memory-trainer/releases/latest',

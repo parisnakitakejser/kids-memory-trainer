@@ -101,4 +101,34 @@ void main() {
     expect(scores.first.playerName, 'Player 29');
     expect(scores.last.playerName, 'Player 5');
   });
+
+  test('randomizes asset order before creating pairs', () {
+    final sortedAssets = List.generate(40, (index) => 'asset_$index.png');
+    var foundDifferentOrder = false;
+
+    for (var attempt = 0; attempt < 12; attempt++) {
+      final gameState = GameState(
+        isMultiplayer: false,
+        playerNames: const ['Player 1'],
+        theme: GameTheme.animals,
+        gridSize: 4,
+        themeAssets: sortedAssets,
+      );
+      final usedAssets = gameState.cards
+          .map((card) => card.assetPath)
+          .whereType<String>()
+          .toSet()
+          .toList();
+
+      if (usedAssets.join('|') !=
+          sortedAssets.take(usedAssets.length).join('|')) {
+        foundDifferentOrder = true;
+      }
+
+      gameState.dispose();
+      if (foundDifferentOrder) break;
+    }
+
+    expect(foundDifferentOrder, isTrue);
+  });
 }
