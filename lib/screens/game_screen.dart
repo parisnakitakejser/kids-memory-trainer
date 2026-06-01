@@ -294,7 +294,10 @@ class _GameScreenState extends State<GameScreen> {
                       items: AppLanguage.values.map((language) {
                         return DropdownMenuItem(
                           value: language,
-                          child: Text(language.label),
+                          child: Text(switch (language) {
+                            AppLanguage.english => strings.english,
+                            AppLanguage.danish => strings.danish,
+                          }),
                         );
                       }).toList(),
                       onChanged: (language) {

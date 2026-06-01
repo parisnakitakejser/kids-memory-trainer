@@ -191,7 +191,10 @@ class _MainMenuState extends State<MainMenu> {
                       items: AppLanguage.values.map((language) {
                         return DropdownMenuItem(
                           value: language,
-                          child: Text(language.label),
+                          child: Text(switch (language) {
+                            AppLanguage.english => dialogStrings.english,
+                            AppLanguage.danish => dialogStrings.danish,
+                          }),
                         );
                       }).toList(),
                       onChanged: (language) {
