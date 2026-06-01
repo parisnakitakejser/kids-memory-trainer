@@ -4,13 +4,11 @@
     "config:recommended"
   ],
   "dependencyDashboard": true,
+  "configMigration": true,
   "labels": [
     "dependencies"
   ],
   "timezone": "Europe/Copenhagen",
-  "schedule": [
-    "before 5am every day"
-  ],
   "enabledManagers": [
     "pub",
     "github-actions"
@@ -43,9 +41,6 @@
     }
   ],
   "lockFileMaintenance": {
-    "enabled": true,
-    "schedule": [
-      "before 5am every day"
-    ]
+    "enabled": true
   }
 }
