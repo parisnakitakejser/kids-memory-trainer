@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'app_settings.dart';
+import 'l10n/generated/app_localizations.dart';
 import 'screens/main_menu.dart';
 
 void main() {
@@ -40,6 +41,9 @@ class _MemoryGameAppState extends State<MemoryGameApp> {
       child: MaterialApp(
         title: 'Kids Memory Trainer',
         debugShowCheckedModeBanner: false,
+        locale: Locale(_settingsController.language.code),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
             seedColor: const Color(0xFF3F8CFF),

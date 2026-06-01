@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../app_settings.dart';
-import '../l10n/app_strings.dart';
+import '../l10n/generated/app_localizations.dart';
 import '../models/game_state.dart';
 import '../services/update_service.dart';
 import '../widgets/app_footer.dart';
@@ -61,7 +61,7 @@ class _MainMenuState extends State<MainMenu> {
     await showDialog<void>(
       context: context,
       builder: (dialogContext) {
-        final dialogStrings = AppStrings.of(context);
+        final dialogStrings = AppLocalizations.of(context);
 
         return AlertDialog(
           icon: const Icon(
@@ -83,7 +83,7 @@ class _MainMenuState extends State<MainMenu> {
   }
 
   Future<void> _showUpdateDialog(UpdateInfo update) async {
-    final strings = AppStrings.of(context);
+    final strings = AppLocalizations.of(context);
 
     await showDialog<void>(
       context: context,
@@ -92,7 +92,7 @@ class _MainMenuState extends State<MainMenu> {
 
         return StatefulBuilder(
           builder: (context, setDialogState) {
-            final dialogStrings = AppStrings.of(context);
+            final dialogStrings = AppLocalizations.of(context);
 
             return AlertDialog(
               title: Text(dialogStrings.updateAvailable),
@@ -167,7 +167,7 @@ class _MainMenuState extends State<MainMenu> {
       builder: (dialogContext) {
         return StatefulBuilder(
           builder: (context, setDialogState) {
-            final dialogStrings = AppStrings.of(context);
+            final dialogStrings = AppLocalizations.of(context);
 
             return AlertDialog(
               title: Text(dialogStrings.gameSettings),
@@ -227,7 +227,7 @@ class _MainMenuState extends State<MainMenu> {
   }
 
   void _startGame() {
-    final strings = AppStrings.of(context);
+    final strings = AppLocalizations.of(context);
 
     if (_isMultiplayer &&
         (_player1Controller.text.trim().isEmpty ||
@@ -254,7 +254,7 @@ class _MainMenuState extends State<MainMenu> {
 
   @override
   Widget build(BuildContext context) {
-    final strings = AppStrings.of(context);
+    final strings = AppLocalizations.of(context);
     final isWide = MediaQuery.sizeOf(context).width >= 900;
     final heroPanel = _HeroPanel(strings: strings);
     final setupPanel = _SetupPanel(
@@ -341,7 +341,7 @@ class _MainMenuState extends State<MainMenu> {
 }
 
 class _HeroPanel extends StatelessWidget {
-  final AppStrings strings;
+  final AppLocalizations strings;
 
   const _HeroPanel({required this.strings});
 
@@ -396,7 +396,7 @@ class _HeroPanel extends StatelessWidget {
 }
 
 class _SetupPanel extends StatelessWidget {
-  final AppStrings strings;
+  final AppLocalizations strings;
   final PlayerMode selectedPlayerMode;
   final GameTheme selectedTheme;
   final int selectedGridSize;

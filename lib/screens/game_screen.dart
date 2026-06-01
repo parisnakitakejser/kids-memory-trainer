@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../app_settings.dart';
-import '../l10n/app_strings.dart';
+import '../l10n/generated/app_localizations.dart';
 import '../models/game_state.dart';
 import '../services/sound_service.dart';
 import '../widgets/memory_card.dart';
@@ -105,7 +105,7 @@ class _GameScreenState extends State<GameScreen> {
   Future<void> _handleGameOver() async {
     final gameState = _gameState;
     if (gameState == null) return;
-    final strings = AppStrings.of(context);
+    final strings = AppLocalizations.of(context);
     final languageCode =
         widget.theme == GameTheme.letters ? _activeLanguage.code : null;
 
@@ -209,7 +209,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   Future<String?> _askForHighScoreName() async {
-    final strings = AppStrings.of(context);
+    final strings = AppLocalizations.of(context);
     final controller = TextEditingController();
 
     final name = await showDialog<String?>(
@@ -272,7 +272,7 @@ class _GameScreenState extends State<GameScreen> {
       builder: (dialogContext) {
         return StatefulBuilder(
           builder: (context, setDialogState) {
-            final strings = AppStrings.of(context);
+            final strings = AppLocalizations.of(context);
 
             return AlertDialog(
               title: Text(strings.gameSettings),
@@ -375,7 +375,7 @@ class _GameScreenState extends State<GameScreen> {
   @override
   Widget build(BuildContext context) {
     final gameState = _gameState;
-    final strings = AppStrings.of(context);
+    final strings = AppLocalizations.of(context);
 
     return Scaffold(
       backgroundColor: const Color(0xFFFFF7DA),
@@ -591,7 +591,7 @@ class _SinglePlayerScores extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final matchedCards = gameState.matchedPairPreviews;
-    final strings = AppStrings.of(context);
+    final strings = AppLocalizations.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -705,14 +705,14 @@ class _PlayerScorePanel extends StatelessWidget {
             compact: compact,
             stats: [
               _ScoreStat(
-                  label: AppStrings.of(context).tries,
+                  label: AppLocalizations.of(context).tries,
                   value: '${player.tries}'),
               _ScoreStat(
-                label: AppStrings.of(context).ratio,
+                label: AppLocalizations.of(context).ratio,
                 value: _formatRatio(player.successRatio),
               ),
               _ScoreStat(
-                label: AppStrings.of(context).scorer,
+                label: AppLocalizations.of(context).scorer,
                 value: _formatScorer(_playerScorer(player)),
               ),
             ],

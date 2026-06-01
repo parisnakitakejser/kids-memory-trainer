@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../app_settings.dart';
-import '../l10n/app_strings.dart';
+import '../l10n/generated/app_localizations.dart';
 import '../models/game_state.dart';
 import '../services/storage_service.dart';
 
@@ -75,7 +75,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
   }
 
   Widget _buildList() {
-    final strings = AppStrings.of(context);
+    final strings = AppLocalizations.of(context);
 
     if (_scores.isEmpty) {
       return Center(child: Text(strings.noScoresYet));
@@ -130,7 +130,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
   }
 
   Widget _buildFilters() {
-    final strings = AppStrings.of(context);
+    final strings = AppLocalizations.of(context);
     final showLanguage = _selectedTheme == GameTheme.letters;
 
     return Padding(
@@ -196,7 +196,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
 
   @override
   Widget build(BuildContext context) {
-    final strings = AppStrings.of(context);
+    final strings = AppLocalizations.of(context);
 
     return Scaffold(
       appBar: AppBar(

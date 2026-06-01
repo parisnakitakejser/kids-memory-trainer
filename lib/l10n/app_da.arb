@@ -1,0 +1,112 @@
+{
+  "@@locale": "da",
+  "appTitle": "Kids Memory Trainer",
+  "menuSubtitle": "Find dyrepar, saml stik, og slå tiden.",
+  "animalCards": "Dyrekort",
+  "matchScores": "Stik og point",
+  "timeTrial": "Tidsspil",
+  "playerMode": "Spiltype",
+  "single": "Alene",
+  "multi": "Flere",
+  "cardMode": "Korttype",
+  "animals": "Dyr",
+  "letters": "Bogstaver",
+  "boardSize": "Brætstørrelse",
+  "players": "Spillere",
+  "player1Name": "Spiller 1 navn",
+  "player2Name": "Spiller 2 navn",
+  "startSinglePlayer": "Start alene",
+  "startMultiplayer": "Start med flere",
+  "viewLeaderboard": "Se scorerliste",
+  "leaderboard": "Scorerliste",
+  "global": "Global",
+  "english": "Engelsk",
+  "danish": "Dansk",
+  "noScoresYet": "Ingen rekorder endnu. Spil et spil!",
+  "singlePlayerFastest": "Alene",
+  "multiplayerTopScores": "Flere spillere (flest point)",
+  "points": "{score} point",
+  "@points": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "scorer": "Scorer",
+  "highScore": "Rekord!",
+  "highScoreNamePrompt": "Skriv et navn til scorerlisten.",
+  "playerName": "Spillernavn",
+  "skip": "Spring over",
+  "enterNames": "Skriv navne på begge spillere.",
+  "gameSettings": "Spilindstillinger",
+  "createdBy": "Lavet af Paris Nakita Kejser",
+  "updateAvailable": "Ny version tilgængelig",
+  "updateAvailableBody": "Version {version} er klar til download og installation.",
+  "@updateAvailableBody": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "gameUpToDate": "Klar til mere hukommelsessjov!",
+  "gameUpToDateBody": "Kids Memory Trainer er opdateret. God fornøjelse!",
+  "downloadAndInstall": "Download og installer",
+  "later": "Senere",
+  "downloadingUpdate": "Downloader opdatering...",
+  "updateOpened": "Opdateringen blev downloadet og startet.",
+  "updateFailed": "Kunne ikke downloade opdateringen lige nu.",
+  "languageLabel": "Sprog",
+  "close": "Luk",
+  "apply": "Brug",
+  "cancel": "Annuller",
+  "newGame": "Nyt spil",
+  "animalMatchParty": "Dyre-match fest",
+  "animalTimeTrial": "Dyretidsspil",
+  "matches": "Stik",
+  "tries": "Forsøg",
+  "ratio": "Ratio",
+  "matchFound": "Stik!",
+  "score": "Point",
+  "gameOver": "Spillet er slut!",
+  "winner": "Vinder: {name}",
+  "@winner": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "winnerPortalTitle": "Vinder!",
+  "winnerScore": "{score} stik",
+  "@winnerScore": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "completedIn": "Klar på {seconds} sekunder!",
+  "@completedIn": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "seconds": "{seconds}s",
+  "@seconds": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "mainMenu": "Hovedmenu",
+  "currentGame": "Nuværende spil",
+  "restartApplies": "Når brætstørrelsen ændres, starter et nyt spil.",
+  "bee": "Bi",
+  "koala": "Koala",
+  "fox": "Ræv"
+}

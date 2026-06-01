@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../l10n/app_strings.dart';
+import '../l10n/generated/app_localizations.dart';
 import '../services/link_service.dart';
 import '../services/update_service.dart';
 
@@ -9,7 +9,7 @@ class AppFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final strings = AppStrings.of(context);
+    final strings = AppLocalizations.of(context);
 
     return DecoratedBox(
       decoration: BoxDecoration(

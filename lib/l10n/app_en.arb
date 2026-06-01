@@ -1,0 +1,112 @@
+{
+  "@@locale": "en",
+  "appTitle": "Kids Memory Trainer",
+  "menuSubtitle": "Find the animal pairs, collect matches, and race the timer.",
+  "animalCards": "Animal cards",
+  "matchScores": "Match scores",
+  "timeTrial": "Time trial",
+  "playerMode": "Player Mode",
+  "single": "Single",
+  "multi": "Multi",
+  "cardMode": "Card Mode",
+  "animals": "Animals",
+  "letters": "Letters",
+  "boardSize": "Board Size",
+  "players": "Players",
+  "player1Name": "Player 1 Name",
+  "player2Name": "Player 2 Name",
+  "startSinglePlayer": "Start Single Player",
+  "startMultiplayer": "Start Multiplayer",
+  "viewLeaderboard": "View Scorer Board",
+  "leaderboard": "Scorer Board",
+  "global": "Global",
+  "english": "English",
+  "danish": "Danish",
+  "noScoresYet": "No scores yet. Play a game!",
+  "singlePlayerFastest": "Single Player",
+  "multiplayerTopScores": "Multiplayer (Top Scores)",
+  "points": "{score} pts",
+  "@points": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "scorer": "Scorer",
+  "highScore": "Highscore!",
+  "highScoreNamePrompt": "Enter a name for the scorer board.",
+  "playerName": "Player name",
+  "skip": "Skip",
+  "enterNames": "Please enter names for both players.",
+  "gameSettings": "Game Settings",
+  "createdBy": "Created by Paris Nakita Kejser",
+  "updateAvailable": "New Version Available",
+  "updateAvailableBody": "Version {version} is ready to download and install.",
+  "@updateAvailableBody": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "gameUpToDate": "Ready for more memory fun!",
+  "gameUpToDateBody": "Kids Memory Trainer is up to date. Happy playing!",
+  "downloadAndInstall": "Download and Install",
+  "later": "Later",
+  "downloadingUpdate": "Downloading update...",
+  "updateOpened": "The update was downloaded and started.",
+  "updateFailed": "Could not download the update right now.",
+  "languageLabel": "Language",
+  "close": "Close",
+  "apply": "Apply",
+  "cancel": "Cancel",
+  "newGame": "New Game",
+  "animalMatchParty": "Animal Match Party",
+  "animalTimeTrial": "Animal Time Trial",
+  "matches": "Matches",
+  "tries": "Tries",
+  "ratio": "Ratio",
+  "matchFound": "Match!",
+  "score": "Score",
+  "gameOver": "Game Over!",
+  "winner": "Winner: {name}",
+  "@winner": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "winnerPortalTitle": "Winner!",
+  "winnerScore": "{score} matches",
+  "@winnerScore": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "completedIn": "Completed in {seconds} seconds!",
+  "@completedIn": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "seconds": "{seconds}s",
+  "@seconds": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "mainMenu": "Main Menu",
+  "currentGame": "Current Game",
+  "restartApplies": "Changing board size starts a new game.",
+  "bee": "Bee",
+  "koala": "Koala",
+  "fox": "Fox"
+}
