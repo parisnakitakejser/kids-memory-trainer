@@ -18,10 +18,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Validate Renovate token
+        run: |
+          if [ -z "$RENOVATE_TOKEN" ]; then
+            echo "::error::Missing RENOVATE_TOKEN secret. Add a GitHub PAT as repository secret RENOVATE_TOKEN."
+            exit 1
+          fi
+        env:
+          RENOVATE_TOKEN: ${{ secrets.RENOVATE_TOKEN }}
+
       - name: Self-hosted Renovate
         uses: renovatebot/github-action@v46.1.14
         with:
           token: ${{ secrets.RENOVATE_TOKEN }}
         env:
           LOG_LEVEL: info
+          RENOVATE_TOKEN: ${{ secrets.RENOVATE_TOKEN }}
           RENOVATE_REPOSITORIES: ${{ github.repository }}
