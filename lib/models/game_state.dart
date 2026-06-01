@@ -465,6 +465,10 @@ class GameState extends ChangeNotifier {
         currentPlayer.matchedCards.add(firstCard!);
       }
 
+      if (cards.every((card) => card.isMatched)) {
+        _timer?.cancel();
+      }
+
       notifyListeners();
       return;
     } else {

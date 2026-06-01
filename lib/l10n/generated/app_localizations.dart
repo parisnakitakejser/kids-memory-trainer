@@ -296,6 +296,12 @@ abstract class AppLocalizations {
   /// **'Game Settings'**
   String get gameSettings;
 
+  /// No description provided for @checkForUpdates.
+  ///
+  /// In en, this message translates to:
+  /// **'Check for Updates'**
+  String get checkForUpdates;
+
   /// No description provided for @createdBy.
   ///
   /// In en, this message translates to:

@@ -50,7 +50,6 @@ class _MainMenuState extends State<MainMenu> {
     if (!mounted) return;
 
     if (update == null) {
-      await _showUpToDateDialog();
       return;
     }
 
@@ -161,6 +160,7 @@ class _MainMenuState extends State<MainMenu> {
   Future<void> _showSettings() async {
     final settings = AppSettingsScope.of(context);
     var selectedLanguage = settings.language;
+    var checkingForUpdate = false;
 
     await showDialog<void>(
       context: context,
@@ -203,6 +203,40 @@ class _MainMenuState extends State<MainMenu> {
                           selectedLanguage = language;
                         });
                       },
+                    ),
+                    const SizedBox(height: 20),
+                    const Divider(),
+                    const SizedBox(height: 12),
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton.icon(
+                        onPressed: checkingForUpdate
+                            ? null
+                            : () async {
+                                setDialogState(() {
+                                  checkingForUpdate = true;
+                                });
+                                final update =
+                                    await _updateService.checkForUpdate();
+                                if (!dialogContext.mounted) return;
+                                setDialogState(() {
+                                  checkingForUpdate = false;
+                                });
+                                if (update == null) {
+                                  await _showUpToDateDialog();
+                                } else {
+                                  await _showUpdateDialog(update);
+                                }
+                              },
+                        icon: checkingForUpdate
+                            ? const SizedBox.square(
+                                dimension: 18,
+                                child:
+                                    CircularProgressIndicator(strokeWidth: 2),
+                              )
+                            : const Icon(Icons.system_update_rounded),
+                        label: Text(dialogStrings.checkForUpdates),
+                      ),
                     ),
                   ],
                 ),

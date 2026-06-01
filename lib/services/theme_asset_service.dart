@@ -25,7 +25,7 @@ class ThemeAssetService {
         .where(_isSupportedImage)
         .toList();
 
-    assets.sort(_naturalSort);
+    assets.sort(naturalSort);
     return assets;
   }
 
@@ -46,14 +46,23 @@ class ThemeAssetService {
     return _imageExtensions.any(lowerAsset.endsWith);
   }
 
-  static int _naturalSort(String a, String b) {
+  static int naturalSort(String a, String b) {
     final aName = a.split('/').last;
     final bName = b.split('/').last;
-    final aNumber = int.tryParse(aName.split('.').first);
-    final bNumber = int.tryParse(bName.split('.').first);
 
-    if (aNumber != null && bNumber != null) {
-      return aNumber.compareTo(bNumber);
+    final aMatch = RegExp(r'^\d+').firstMatch(aName);
+    final bMatch = RegExp(r'^\d+').firstMatch(bName);
+
+    if (aMatch != null && bMatch != null) {
+      final aNumber = int.parse(aMatch.group(0)!);
+      final bNumber = int.parse(bMatch.group(0)!);
+      if (aNumber != bNumber) {
+        return aNumber.compareTo(bNumber);
+      }
+    } else if (aMatch != null) {
+      return -1;
+    } else if (bMatch != null) {
+      return 1;
     }
 
     return aName.compareTo(bName);

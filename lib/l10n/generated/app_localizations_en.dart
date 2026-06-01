@@ -111,6 +111,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gameSettings => 'Game Settings';
 
   @override
+  String get checkForUpdates => 'Check for Updates';
+
+  @override
   String get createdBy => 'Created by Paris Nakita Kejser';
 
   @override

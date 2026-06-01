@@ -131,4 +131,46 @@ void main() {
 
     expect(foundDifferentOrder, isTrue);
   });
+
+  test('cancels game timer immediately when last pair matches', () async {
+    final gameState = GameState(
+      isMultiplayer: false,
+      playerNames: const ['Player 1'],
+      theme: GameTheme.letters,
+      gridSize: 2,
+    );
+
+    final groups = <String, List<int>>{};
+    for (var i = 0; i < gameState.cards.length; i++) {
+      final key = gameState.cards[i].matchKey;
+      groups.putIfAbsent(key, () => []).add(i);
+    }
+
+    final pairs = groups.values.toList();
+    expect(pairs.length, 2);
+
+    // Flip first pair
+    gameState.flipCard(pairs[0][0]);
+    gameState.flipCard(pairs[0][1]);
+    expect(gameState.matchedPairs, 1);
+    gameState.acknowledgeMatchPreview();
+
+    final secondsBeforeLastMatch = gameState.elapsedSeconds;
+    await Future<void>.delayed(const Duration(milliseconds: 1100));
+    final secondsAfterDelay = gameState.elapsedSeconds;
+    expect(secondsAfterDelay, greaterThan(secondsBeforeLastMatch));
+
+    // Flip last pair
+    gameState.flipCard(pairs[1][0]);
+    gameState.flipCard(pairs[1][1]);
+    expect(gameState.matchedPairs, 2);
+
+    final secondsOnMatch = gameState.elapsedSeconds;
+    await Future<void>.delayed(const Duration(milliseconds: 1100));
+
+    // Should NOT have incremented further because the timer is cancelled
+    expect(gameState.elapsedSeconds, secondsOnMatch);
+
+    gameState.dispose();
+  });
 }

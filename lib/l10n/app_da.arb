@@ -40,6 +40,7 @@
   "skip": "Spring over",
   "enterNames": "Skriv navne på begge spillere.",
   "gameSettings": "Spilindstillinger",
+  "checkForUpdates": "Søg efter opdateringer",
   "createdBy": "Lavet af Paris Nakita Kejser",
   "updateAvailable": "Ny version tilgængelig",
   "updateAvailableBody": "Version {version} er klar til download og installation.",

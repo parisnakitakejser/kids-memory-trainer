@@ -26,10 +26,16 @@ class _MemoryGameAppState extends State<MemoryGameApp> {
   void initState() {
     super.initState();
     _settingsController.load();
+    _settingsController.addListener(_onSettingsChanged);
+  }
+
+  void _onSettingsChanged() {
+    setState(() {});
   }
 
   @override
   void dispose() {
+    _settingsController.removeListener(_onSettingsChanged);
     _settingsController.dispose();
     super.dispose();
   }

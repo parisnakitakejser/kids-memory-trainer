@@ -110,6 +110,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get gameSettings => 'Spilindstillinger';
 
   @override
+  String get checkForUpdates => 'Søg efter opdateringer';
+
+  @override
   String get createdBy => 'Lavet af Paris Nakita Kejser';
 
   @override
