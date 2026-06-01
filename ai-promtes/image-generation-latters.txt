@@ -89,62 +89,6 @@ Quality:
 
 ### Danish
 
-Letter: P
-Animal: Voksen Pingvin
-Colors: Ice blue + mint
-Pose: Proud, standing tall
-Size: Slightly larger
-Expression: Friendly and confident
-
-Letter: p
-Animal: Pingvinunge
-Colors: Ice blue + mint
-Pose: Sitting or playing
-Size: Smaller and rounder
-Expression: Cute and innocent
-
-Letter: Q
-Animal: Voksen Quetzal
-Colors: Emerald green + turquoise
-Pose: Proud, standing tall
-Size: Slightly larger
-Expression: Friendly and confident
-
-Letter: q
-Animal: Quetzalunge
-Colors: Emerald green + turquoise
-Pose: Sitting or playing
-Size: Smaller and rounder
-Expression: Cute and innocent
-
-Letter: R
-Animal: Voksen Ræv
-Colors: Orange + cream
-Pose: Proud, standing tall
-Size: Slightly larger
-Expression: Friendly and confident
-
-Letter: r
-Animal: Rævehvalp
-Colors: Orange + cream
-Pose: Sitting or playing
-Size: Smaller and rounder
-Expression: Cute and innocent
-
-Letter: S
-Animal: Voksen Sæl
-Colors: Ocean blue + gray
-Pose: Proud, standing tall
-Size: Slightly larger
-Expression: Friendly and confident
-
-Letter: s
-Animal: Sælunge
-Colors: Ocean blue + gray
-Pose: Sitting or playing
-Size: Smaller and rounder
-Expression: Cute and innocent
-
 Letter: T
 Animal: Voksen Tiger
 Colors: Orange + yellow
