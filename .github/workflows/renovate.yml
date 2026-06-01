@@ -1,0 +1,27 @@
+name: Renovate
+
+on:
+  workflow_dispatch:
+  schedule:
+    # GitHub cron is UTC. This runs before 5am in Europe/Copenhagen all year.
+    - cron: '30 2 * * *'
+
+permissions:
+  contents: read
+
+jobs:
+  renovate:
+    name: Run Renovate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Self-hosted Renovate
+        uses: renovatebot/github-action@v46.1.14
+        with:
+          token: ${{ secrets.RENOVATE_TOKEN }}
+        env:
+          LOG_LEVEL: info
+          RENOVATE_REPOSITORIES: ${{ github.repository }}
