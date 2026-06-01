@@ -16,9 +16,11 @@
   "branchPrefix": "renovate/",
   "prCreation": "immediate",
   "dependencyDashboardApproval": false,
+  "automergeType": "pr",
+  "ignoreTests": false,
   "packageRules": [
     {
-      "description": "Group Flutter/Dart dependency updates",
+      "description": "Automerge grouped Flutter/Dart minor and patch updates after checks pass",
       "matchManagers": [
         "pub"
       ],
@@ -26,22 +28,34 @@
         "minor",
         "patch"
       ],
-      "groupName": "Flutter and Dart dependencies"
+      "groupName": "Flutter and Dart dependencies",
+      "automerge": true
     },
     {
-      "description": "Group GitHub Actions updates",
+      "description": "Automerge grouped GitHub Actions minor and patch updates after checks pass",
       "matchManagers": [
         "github-actions"
       ],
       "matchUpdateTypes": [
-        "major",
         "minor",
         "patch"
       ],
-      "groupName": "GitHub Actions"
+      "groupName": "GitHub Actions",
+      "automerge": true
+    },
+    {
+      "description": "Keep major GitHub Actions updates separate for manual review",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "groupName": "GitHub Actions major updates"
     }
   ],
   "lockFileMaintenance": {
-    "enabled": true
+    "enabled": true,
+    "automerge": true
   }
 }
