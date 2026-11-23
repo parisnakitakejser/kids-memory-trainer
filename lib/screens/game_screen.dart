@@ -62,7 +62,6 @@ class _GameScreenState extends State<GameScreen> {
       fallbackLetters: language == AppLanguage.danish
           ? GameState.danishLetters
           : GameState.englishLetters,
-      letterLanguageCode: language.code,
     );
     gameState.addListener(_onGameStateChanged);
 
@@ -92,12 +91,7 @@ class _GameScreenState extends State<GameScreen> {
     if (matchPreviewCard != null &&
         matchPreviewCard.id != _lastMatchSoundCardId) {
       _lastMatchSoundCardId = matchPreviewCard.id;
-      final animalSoundPath = matchPreviewCard.letterAudio?.animalSoundPath;
-      if (animalSoundPath == null) {
-        SoundService.playMatch();
-      } else {
-        SoundService.playLetterAsset(animalSoundPath);
-      }
+      SoundService.playMatch();
       HapticFeedback.mediumImpact();
     }
 
@@ -539,14 +533,7 @@ class _FittedGameBoard extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return MemoryCard(
                       card: gameState.cards[index],
-                      onTap: () {
-                        final flippedCard = gameState.flipCard(index);
-                        final letterSoundPath =
-                            flippedCard?.letterAudio?.letterSoundPath;
-                        if (letterSoundPath != null) {
-                          SoundService.playLetterAsset(letterSoundPath);
-                        }
-                      },
+                      onTap: () => gameState.flipCard(index),
                     );
                   },
                 ),

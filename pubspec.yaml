@@ -31,8 +31,4 @@ flutter:
     - build_assets/letters/en/
     - build_assets/letters/da/
     - build_assets/colors/
-    - assets/letters/en/
-    - assets/letters/da/
     - assets/sounds/
-    - assets/sounds/letters/en/
-    - assets/sounds/letters/da/
