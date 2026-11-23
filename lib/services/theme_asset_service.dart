@@ -35,7 +35,7 @@ class ThemeAssetService {
     }
 
     if (theme == GameTheme.letters) {
-      return 'build_assets/letters/${language.code}/';
+      return 'assets/letters/${language.code}/';
     }
 
     return 'build_assets/${theme.assetFolder}/';

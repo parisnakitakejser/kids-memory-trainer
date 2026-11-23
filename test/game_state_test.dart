@@ -132,6 +132,42 @@ void main() {
     expect(foundDifferentOrder, isTrue);
   });
 
+  test('attaches language and case specific audio to letter image cards', () {
+    final gameState = GameState(
+      isMultiplayer: false,
+      playerNames: const ['Player 1'],
+      theme: GameTheme.letters,
+      gridSize: 2,
+      themeAssets: const [
+        'assets/letters/da/aa-upper.png',
+        'assets/letters/da/aa-lower.png',
+      ],
+      letterLanguageCode: 'da',
+    );
+
+    final upperCard = gameState.cards.firstWhere(
+      (card) => card.assetPath == 'assets/letters/da/aa-upper.png',
+    );
+    final lowerCard = gameState.cards.firstWhere(
+      (card) => card.assetPath == 'assets/letters/da/aa-lower.png',
+    );
+
+    expect(
+      upperCard.letterAudio?.letterSoundPath,
+      'assets/sounds/letters/da/aa-upper-letter.aiff',
+    );
+    expect(
+      upperCard.letterAudio?.animalSoundPath,
+      'assets/sounds/letters/da/aa-upper-animal.aiff',
+    );
+    expect(
+      lowerCard.letterAudio?.letterSoundPath,
+      'assets/sounds/letters/da/aa-lower-letter.aiff',
+    );
+
+    gameState.dispose();
+  });
+
   test('cancels game timer immediately when last pair matches', () async {
     final gameState = GameState(
       isMultiplayer: false,

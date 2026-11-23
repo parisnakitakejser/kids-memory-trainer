@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
+import 'letter_card_audio.dart';
+
 enum GameTheme { colors, animals, numbers, letters }
 
 extension GameThemeAssets on GameTheme {
@@ -24,6 +26,7 @@ class CardModel {
   final Color color;
   final String? content;
   final String? assetPath;
+  final LetterCardAudio? letterAudio;
   bool isFaceUp;
   bool isMatched;
 
@@ -32,6 +35,7 @@ class CardModel {
     required this.color,
     this.content,
     this.assetPath,
+    this.letterAudio,
     this.isFaceUp = false,
     this.isMatched = false,
   });
@@ -58,6 +62,7 @@ class GameState extends ChangeNotifier {
   final int gridSize;
   final List<String> themeAssets;
   final List<String> fallbackLetters;
+  final String letterLanguageCode;
 
   List<CardModel> cards = [];
   int currentPlayerIndex = 0;
@@ -81,6 +86,7 @@ class GameState extends ChangeNotifier {
     required this.gridSize,
     this.themeAssets = const [],
     this.fallbackLetters = englishLetters,
+    this.letterLanguageCode = 'en',
   }) : players = playerNames.map((name) => Player(name: name)).toList() {
     _initializeBoard();
     if (!isMultiplayer) {
@@ -363,6 +369,7 @@ class GameState extends ChangeNotifier {
       final color = palette[i];
       String? content;
       String? assetPath;
+      LetterCardAudio? letterAudio;
 
       switch (theme) {
         case GameTheme.animals:
@@ -382,8 +389,13 @@ class GameState extends ChangeNotifier {
         case GameTheme.letters:
           if (i < shuffledThemeAssets.length) {
             assetPath = shuffledThemeAssets[i];
+            letterAudio = LetterCardAudio.fromAssetPath(assetPath);
           } else {
             content = fallbackLetters[i % fallbackLetters.length];
+            letterAudio = LetterCardAudio.fromContent(
+              content,
+              languageCode: letterLanguageCode,
+            );
           }
           break;
         case GameTheme.colors:
@@ -396,9 +408,19 @@ class GameState extends ChangeNotifier {
       }
 
       cards.add(CardModel(
-          id: uuid.v4(), color: color, content: content, assetPath: assetPath));
+        id: uuid.v4(),
+        color: color,
+        content: content,
+        assetPath: assetPath,
+        letterAudio: letterAudio,
+      ));
       cards.add(CardModel(
-          id: uuid.v4(), color: color, content: content, assetPath: assetPath));
+        id: uuid.v4(),
+        color: color,
+        content: content,
+        assetPath: assetPath,
+        letterAudio: letterAudio,
+      ));
     }
     cards.shuffle();
     notifyListeners();
@@ -428,11 +450,11 @@ class GameState extends ChangeNotifier {
     super.dispose();
   }
 
-  void flipCard(int index) async {
-    if (isProcessing || isGameOver) return;
+  CardModel? flipCard(int index) {
+    if (isProcessing || isGameOver) return null;
 
     final card = cards[index];
-    if (card.isFaceUp || card.isMatched) return;
+    if (card.isFaceUp || card.isMatched) return null;
 
     card.isFaceUp = true;
     notifyListeners();
@@ -443,6 +465,8 @@ class GameState extends ChangeNotifier {
       secondCard = card;
       _checkMatch();
     }
+
+    return card;
   }
 
   void _checkMatch() async {

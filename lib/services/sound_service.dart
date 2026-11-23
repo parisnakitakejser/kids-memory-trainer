@@ -8,6 +8,7 @@ class SoundService {
   static const String _winnerAssetPath = 'assets/sounds/winner_applause.wav';
   static File? _matchSoundFile;
   static File? _winnerSoundFile;
+  static final Map<String, File> _assetSoundFiles = {};
 
   static Future<void> playMatch() async {
     await _playAsset(
@@ -26,6 +27,16 @@ class SoundService {
       cachedFile: () => _winnerSoundFile,
       setCachedFile: (file) => _winnerSoundFile = file,
       fallback: SystemSoundType.alert,
+    );
+  }
+
+  static Future<void> playLetterAsset(String assetPath) async {
+    await _playAsset(
+      assetPath: assetPath,
+      tempFileName: _tempFileNameForAsset(assetPath),
+      cachedFile: () => _assetSoundFiles[assetPath],
+      setCachedFile: (file) => _assetSoundFiles[assetPath] = file,
+      fallback: SystemSoundType.click,
     );
   }
 
@@ -71,5 +82,12 @@ class SoundService {
     await file.writeAsBytes(data.buffer.asUint8List(), flush: true);
     setCachedFile(file);
     return file;
+  }
+
+  static String _tempFileNameForAsset(String assetPath) {
+    final safeName = assetPath
+        .replaceAll(RegExp(r'[^a-zA-Z0-9._-]+'), '_')
+        .replaceAll(RegExp(r'_+'), '_');
+    return 'kids_memory_$safeName';
   }
 }
